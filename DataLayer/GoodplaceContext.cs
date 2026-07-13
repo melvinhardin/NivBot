@@ -18,6 +18,9 @@ namespace NivBot.DataLayer
         public DbSet<GoodplaceUser> GoodplaceUsers => Set<GoodplaceUser>();
         public DbSet<CollectionLog> CollectionLogs => Set<CollectionLog>();
         public DbSet<Collectable> Collectables => Set<Collectable>();
+        public DbSet<Boss> Bosses => Set<Boss>();
+        public DbSet<Item> Items => Set<Item>();
+        public DbSet<Raid> Raids => Set<Raid>();
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -12,7 +12,8 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<Wallet> builder)
         {
             builder
-                .HasKey("Id");
+                .HasKey(c => c.GoodplaceUserId);
+
             builder
                 .HasOne<GoodplaceUser>(u => u.GoodplaceUser)
                 .WithOne(w => w.Wallet)

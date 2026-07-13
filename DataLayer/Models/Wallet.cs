@@ -6,7 +6,6 @@ namespace NivBot.DataLayer.Models
 {
     public class Wallet
     {
-        public int Id { get; set; }
         public int GoodplacePoints { get; set; }
         public int GoodplaceCurrency { get; set; }
 

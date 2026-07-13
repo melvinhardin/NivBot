@@ -6,7 +6,7 @@ namespace NivBot.DataLayer.Models
 {
     public class RunescapeAccount
     {
-        public int RunescapeId { get; set; }
+        public int Id { get; set; }
         public required string RunescapeName { get; set; }
         public int GoodplaceUserId { get; set; }
         public GoodplaceUser GoodplaceUser { get; set; }

@@ -12,7 +12,10 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<RunescapeAccount> builder)
         {
             builder
-                .HasKey(c => c.RunescapeId);
+                .HasKey(c => c.Id);
+            builder
+                .Property(c => c.Id)
+                .ValueGeneratedOnAdd();
             builder
                 .HasIndex(c => c.RunescapeName)
                 .IsUnique();

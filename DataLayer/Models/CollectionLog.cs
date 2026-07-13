@@ -6,12 +6,12 @@ namespace NivBot.DataLayer.Models
 {
     public class CollectionLog
     {
-        public int Ammount { get; set; }
+        public int Amount { get; set; }
 
         public int CollectableId { get; set; }
         public Collectable Collectable { get; set; }
 
-        public string RunescapeAccountName { get; set; }
+        public string RunescapeId { get; set; }
         public RunescapeAccount RunescapeAccount { get; set; }
         
 

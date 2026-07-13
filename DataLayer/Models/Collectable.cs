@@ -9,5 +9,6 @@ namespace NivBot.DataLayer.Models
         public int Id { get; set; }
         public required string OsrsName { get; set; }
         public required int Points { get; set; }
+        public ICollection<CollectionLog> CollectionLogs { get; set; }
     }
 }

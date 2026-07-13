@@ -4,7 +4,8 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    internal class Item
+    public class Item : Collectable
     {
+        public int OsrsId { get; set; }
     }
 }

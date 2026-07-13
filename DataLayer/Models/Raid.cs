@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    internal class Raid
+    public class Raid : Collectable
     {
     }
 }

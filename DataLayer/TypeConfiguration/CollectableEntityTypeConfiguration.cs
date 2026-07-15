@@ -17,7 +17,11 @@ namespace NivBot.DataLayer.TypeConfiguration
             builder
                 .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
-
+            builder
+                .HasDiscriminator<string>("CollectableType")
+                .HasValue<Boss>("collectable_boss")
+                .HasValue<Item>("collectable_item")
+                .HasValue<Raid>("collectable_raid");
             builder
                 .Property(c => c.OsrsName)
                 .IsRequired();

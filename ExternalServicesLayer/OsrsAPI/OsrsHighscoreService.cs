@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NivBot.ExternalServicesLayer.OsrsAPI
 {
-    public class OsrsHighscoreService : IOsrsHighscoreService
+    internal class OsrsHighscoreService : IOsrsHighscoreService
     {
         private readonly HttpClient _httpClient;
         

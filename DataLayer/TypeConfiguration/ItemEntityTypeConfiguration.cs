@@ -22,8 +22,7 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .IsRequired();
 
             builder
-                .Property(x => x.Points)
-                .IsRequired();
+                .Property(x => x.Points);
             
             builder
                 .ToTable(t => {

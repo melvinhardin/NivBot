@@ -7,7 +7,7 @@ namespace NivBot.DataLayer.Models
     public class GoodplaceUser
     {
         public int Id { get; set; }
-        public required ulong DiscordUserId { get; set; }
+        public required long DiscordUserId { get; set; }
 
         public Wallet Wallet { get; set; }
         public ICollection<RunescapeAccount> RunescapeAccounts { get; set; }

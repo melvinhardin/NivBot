@@ -17,7 +17,14 @@ namespace NivBot.DataLayer
         public DbSet<RunescapeAccount> RunescapeAccounts => Set<RunescapeAccount>();
         public DbSet<GoodplaceUser> GoodplaceUsers => Set<GoodplaceUser>();
         public DbSet<CollectionLog> CollectionLogs => Set<CollectionLog>();
-        public DbSet<Item> Collectables => Set<Item>();
+        public DbSet<ActivityLog> ActivityLogs => Set<ActivityLog>();
+        public DbSet<Item> Items => Set<Item>();
+        public DbSet<Activity> Activities => Set<Activity>();
+        public DbSet<DiscordMessage> DiscordMessages => Set<DiscordMessage>();
+        public DbSet<GoodplaceShopItem> GoodplaceShopItems => Set<GoodplaceShopItem>();
+        public DbSet<Competition> Competitions => Set<Competition>();
+        public DbSet<GoodplaceSkillTask> GoodplaceSkillTasks => Set<GoodplaceSkillTask>();
+        public DbSet<GoodplaceActivityTask> GoodplaceActivityTasks => Set<GoodplaceActivityTask>();
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

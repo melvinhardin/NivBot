@@ -22,13 +22,12 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .IsRequired();
 
             builder
-                .Property(x => x.Points)
-                .IsRequired();
+                .Property(x => x.Points);
             
             builder
                 .ToTable(t => {
-                    t.HasCheckConstraint("CK_Collectable_OsrsName", "length(osrs_name) <= 100");
-                    t.HasCheckConstraint("CK_Collectable_Points", "points >= 0 AND points <= 1000");
+                    t.HasCheckConstraint("CK_Activity_OsrsName", "length(osrs_name) <= 100");
+                    t.HasCheckConstraint("CK_Activity_Points", "points >= 0 AND points <= 1000");
                 });
 
         }

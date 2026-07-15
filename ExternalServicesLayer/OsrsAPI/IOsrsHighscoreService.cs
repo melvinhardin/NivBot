@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NivBot.ExternalServicesLayer.OsrsAPI
 {
-    interface IOsrsHighscoreService
+    public interface IOsrsHighscoreService
     {
         Task<PlayerStats?> GetPlayerStatsAsync(string name);
     }

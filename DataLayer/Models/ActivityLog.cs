@@ -4,16 +4,14 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    public class CollectionLog
+    internal class ActivityLog
     {
         public int Ammount { get; set; }
 
-        public int ItemId { get; set; }
-        public Item Item { get; set; }
+        public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
 
         public string RunescapeAccountName { get; set; }
         public RunescapeAccount RunescapeAccount { get; set; }
-        
-
     }
 }

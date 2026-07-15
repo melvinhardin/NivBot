@@ -4,10 +4,10 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    public class Collectable
+    public class DiscordMessage
     {
         public int Id { get; set; }
-        public required string OsrsName { get; set; }
-        public required int Points { get; set; }
+        public string Message { get; set; }
+        public string Type { get; set; }
     }
 }

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace NivBot.DataLayer.TypeConfiguration
 {
-    public class CollectableEntityTypeConfiguration : IEntityTypeConfiguration<Collectable>
+    public class CollectableEntityTypeConfiguration : IEntityTypeConfiguration<Item>
     {
-        public void Configure(EntityTypeBuilder<Collectable> builder)
+        public void Configure(EntityTypeBuilder<Item> builder)
         {
             builder
                 .HasKey(c => c.Id);

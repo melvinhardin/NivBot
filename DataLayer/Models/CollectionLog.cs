@@ -11,7 +11,7 @@ namespace NivBot.DataLayer.Models
         public int ItemId { get; set; }
         public Item Item { get; set; }
 
-        public string RunescapeId { get; set; }
+        public int RunescapeAccountId { get; set; }
         public RunescapeAccount RunescapeAccount { get; set; }
         
 

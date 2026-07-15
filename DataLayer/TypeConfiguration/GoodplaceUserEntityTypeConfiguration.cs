@@ -13,16 +13,14 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<GoodplaceUser> builder)
         {
             builder
-                .HasKey(c => c.Id);
+                .HasKey(x => x.Id);
             builder
-                .Property(c => c.Id)
+                .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
             builder
-                .HasIndex(c => c.DiscordUserId)
+                .HasIndex(x => x.DiscordUserId)
                 .IsUnique();
-            builder
-                .Property(c => c.DiscordUserId)
-                .IsRequired();
+            
             
         }
     }

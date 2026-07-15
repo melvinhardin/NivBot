@@ -12,20 +12,18 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<RunescapeAccount> builder)
         {
             builder
-                .HasKey(c => c.Id);
+                .HasKey(x => x.Id);
             builder
-                .Property(c => c.Id)
+                .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
             builder
-                .HasIndex(c => c.RunescapeName)
+                .HasIndex(x => x.RunescapeName)
                 .IsUnique();
             builder
-                .HasOne<GoodplaceUser>(r => r.GoodplaceUser)
-                .WithMany(u => u.RunescapeAccounts)
-                .HasForeignKey(r => r.GoodplaceUserId)
+                .HasOne<GoodplaceUser>(x => x.GoodplaceUser)
+                .WithMany(x => x.RunescapeAccounts)
+                .HasForeignKey(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder
-                .HasMany<CollectionLog>(r => r.CollectionLogs);
         }
     }
 }

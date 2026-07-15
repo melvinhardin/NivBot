@@ -12,12 +12,12 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<Wallet> builder)
         {
             builder
-                .HasKey(c => c.GoodplaceUserId);
+                .HasKey(x => x.GoodplaceUserId);
 
             builder
-                .HasOne<GoodplaceUser>(u => u.GoodplaceUser)
-                .WithOne(w => w.Wallet)
-                .HasForeignKey<Wallet>(w => w.GoodplaceUserId)
+                .HasOne<GoodplaceUser>(x => x.GoodplaceUser)
+                .WithOne(x => x.Wallet)
+                .HasForeignKey<Wallet>(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -7,9 +7,9 @@ using System.Text;
 
 namespace NivBot.DataLayer.TypeConfiguration
 {
-    public class CompetitionEntityTypeConfiguration :IEntityTypeConfiguration<Competition>
+    public class CompetitionEntityTypeConfiguration :IEntityTypeConfiguration<CompetitionProviderDetails>
     {
-        public void Configure(EntityTypeBuilder<Competition> builder)
+        public void Configure(EntityTypeBuilder<CompetitionProviderDetails> builder)
         {
             builder
                 .HasKey(x => new { x.ExternalId, x.CompetitionProvider });

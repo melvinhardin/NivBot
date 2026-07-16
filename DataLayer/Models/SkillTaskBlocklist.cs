@@ -5,12 +5,10 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    public class RunescapeStat
+    public class SkillTaskBlocklist
     {
-        public int RunescapeAccountId { get; set; }
-        public RunescapeAccount RunescapeAccount { get; set; }
-
+        public int GoodplaceUserId { get; set; }
+        public GoodplaceUser GoodplaceUser { get; set; }
         public Skills Skill { get; set; }
-        public int Xp { get; set; }
     }
 }

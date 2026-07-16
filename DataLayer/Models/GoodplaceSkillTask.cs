@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NivBot.DataLayer.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

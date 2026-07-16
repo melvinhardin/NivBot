@@ -12,6 +12,9 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<ActivityCompetition> builder)
         {
             builder
+                .HasKey(x => x.CompetitionProviderDetailsId);
+
+            builder
                 .HasOne<CompetitionProviderDetails>(x => x.CompetitionProviderDetails)
                 .WithOne()
                 .HasForeignKey<ActivityCompetition>(x => x.CompetitionProviderDetailsId)

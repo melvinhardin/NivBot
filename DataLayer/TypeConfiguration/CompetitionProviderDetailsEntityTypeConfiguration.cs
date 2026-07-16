@@ -13,9 +13,14 @@ namespace NivBot.DataLayer.TypeConfiguration
         {
             builder
                 .HasKey(x => x.Id);
+
             builder
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
+
+            builder
+                .HasIndex(x => new { x.ExternalId, x.CompetitionProvider })
+                .IsUnique();
             
         }
     }

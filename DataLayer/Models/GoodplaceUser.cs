@@ -12,5 +12,9 @@ namespace NivBot.DataLayer.Models
         public Wallet Wallet { get; set; }
         public ICollection<RunescapeAccount> RunescapeAccounts { get; set; }
 
+
+        public GoodplaceActivityTask GoodplaceActivityTask { get; set; }
+        public GoodplaceSkillTask GoodplaceSkillTasks { get; set; }
+
     }
 }

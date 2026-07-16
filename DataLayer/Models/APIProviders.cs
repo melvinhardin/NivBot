@@ -4,7 +4,9 @@ using System.Text;
 
 namespace NivBot.DataLayer.Models
 {
-    public class GoodplaceClueTask
+    public enum APIProviders
     {
+        Wiseoldman,
+        Temple
     }
 }

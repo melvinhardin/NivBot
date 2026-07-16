@@ -8,7 +8,7 @@ namespace NivBot.DataLayer.Models
     {
         public int GoodplaceUserId { get; set; }
         public GoodplaceUser GoodplaceUser { get; set; }
-        public string ActivityOsrsName { get; set; }
+        public int ActivityId { get; set; }
         public Activity Activity { get; set; }
 
         // This is the cumulative amount of the activity done by ALL of the users runescape accounts

@@ -25,7 +25,8 @@ namespace NivBot.DataLayer
         public DbSet<Competition> Competitions => Set<Competition>();
         public DbSet<GoodplaceSkillTask> GoodplaceSkillTasks => Set<GoodplaceSkillTask>();
         public DbSet<GoodplaceActivityTask> GoodplaceActivityTasks => Set<GoodplaceActivityTask>();
-        
+        public DbSet<RunescapeStat> RunescapeStats => Set<RunescapeStat>();
+        public DbSet<SkillEntity> SkillEntities => Set<SkillEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => (

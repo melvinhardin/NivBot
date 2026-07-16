@@ -15,7 +15,7 @@ namespace NivBot.DataLayer.Models
         public ICollection<SkillTaskBlocklist> SkillBlocks { get; set; }
 
         public GoodplaceActivityTask GoodplaceActivityTask { get; set; }
-        public GoodplaceSkillTask GoodplaceSkillTasks { get; set; }
+        public GoodplaceSkillTask GoodplaceSkillTask { get; set; }
 
 
     }

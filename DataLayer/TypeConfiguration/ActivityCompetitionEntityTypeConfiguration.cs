@@ -12,10 +12,17 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<ActivityCompetition> builder)
         {
             builder
-                .HasKey(x => x.Id);
+                .HasOne<CompetitionProviderDetails>(x => x.CompetitionProviderDetails)
+                .WithOne()
+                .HasForeignKey<ActivityCompetition>(x => x.CompetitionProviderDetailsId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder
-                .Property(x => x.Id)
-                .ValueGeneratedOnAdd();
+                .HasOne<Activity>(x => x.Activity)
+                .WithMany()
+                .HasForeignKey(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }

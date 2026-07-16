@@ -7,6 +7,7 @@ namespace NivBot.DataLayer.Models
 {
     public class CompetitionProviderDetails
     {
+        public int Id { get; set; }
         public required APIProviders CompetitionProvider { get; set; }
         public required string ExternalId { get; set; }
         public required string CompetitionKey { get; set; }

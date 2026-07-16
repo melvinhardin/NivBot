@@ -8,6 +8,7 @@ namespace NivBot.DataLayer.Models
     {
         public int GoodplaceUserId { get; set; }
         public GoodplaceUser GoodplaceUser { get; set; }
+        public int ActivityId { get; set; }
         public Activity Activity { get; set; }
 
 

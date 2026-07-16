@@ -23,7 +23,7 @@ namespace NivBot.DataLayer.TypeConfiguration
             builder
                 .HasOne<GoodplaceUser>(x => x.GoodplaceUser)
                 .WithOne(x => x.GoodplaceActivityTask)
-                .HasForeignKey<GoodplaceUser>(x => x.DiscordUserId)
+                .HasForeignKey<GoodplaceActivityTask>(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

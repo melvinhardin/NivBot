@@ -12,14 +12,19 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<ActivityTaskBlocklist> builder)
         {
             builder
-                .HasKey(x => new { x.GoodplaceUserId, x.Activity });
+                .HasKey(x => new { x.GoodplaceUserId, x.ActivityId });
 
             builder
                 .HasOne<GoodplaceUser>(x => x.GoodplaceUser)
                 .WithMany(x => x.ActivityBlocks)
                 .HasForeignKey(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+            builder
+                .HasOne<Activity>(x => x.Activity)
+                .WithMany()
+                .HasForeignKey(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

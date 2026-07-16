@@ -7,12 +7,16 @@ using System.Text;
 
 namespace NivBot.DataLayer.TypeConfiguration
 {
-    public class CompetitionEntityTypeConfiguration :IEntityTypeConfiguration<CompetitionProviderDetails>
+    public class CompetitionProviderDetailsEntityTypeConfiguration : IEntityTypeConfiguration<CompetitionProviderDetails>
     {
         public void Configure(EntityTypeBuilder<CompetitionProviderDetails> builder)
         {
             builder
-                .HasKey(x => new { x.ExternalId, x.CompetitionProvider });
+                .HasKey(x => x.Id);
+            builder
+                .Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+            
         }
     }
 }

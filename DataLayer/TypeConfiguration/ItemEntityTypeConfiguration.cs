@@ -26,8 +26,8 @@ namespace NivBot.DataLayer.TypeConfiguration
             
             builder
                 .ToTable(t => {
-                    t.HasCheckConstraint("CK_Collectable_OsrsName", "length(osrs_name) <= 100");
-                    t.HasCheckConstraint("CK_Collectable_Points", "points >= 0 AND points <= 1000");
+                    t.HasCheckConstraint("CK_Item_OsrsName", "length(osrs_name) <= 100");
+                    t.HasCheckConstraint("CK_Item_Points", "points >= 0 AND points <= 1000");
                 });
 
         }

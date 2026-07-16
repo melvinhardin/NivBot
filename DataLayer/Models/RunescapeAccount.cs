@@ -12,7 +12,7 @@ namespace NivBot.DataLayer.Models
         public GoodplaceUser GoodplaceUser { get; set; }
         public ICollection<CollectionLog> CollectionLogs { get; set; }
         public ICollection<ActivityLog> ActivityLogs { get; set; }
-        public RunescapeStat RunescapeStats { get; set; }
+        public RunescapeStat RunescapeStat { get; set; }
 
     }
 }

@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NivBot.DataLayer.Models;
-using System.Net.NetworkInformation;
-using NetCord;
+
 
 namespace NivBot.DataLayer.TypeConfiguration
 {

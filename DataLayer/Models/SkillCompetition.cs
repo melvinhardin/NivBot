@@ -7,9 +7,9 @@ namespace NivBot.DataLayer.Models
 {
     public class SkillCompetition
     {
-        public int Id { get; set; }
+        public int CompetitionProviderDetailsId { get; set; }
         public CompetitionProviderDetails CompetitionProviderDetails { get; set; }
-        public Skills Skill{ get; set; }
+        public Skills Skill { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
     }

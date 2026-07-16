@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="NivBot.csproj" />
+  <Project Path="NivBot/NivBot.csproj" />
+  <Project Path="NivBot.DataLayer/NivBot.DataLayer.csproj" />
 </Solution>

@@ -10,10 +10,11 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NivBot.csproj", "."]
-RUN dotnet restore "./NivBot.csproj"
+COPY ["NivBot/NivBot.csproj", "NivBot/"]
+COPY ["NivBot.DataLayer/NivBot.DataLayer.csproj", "NivBot.DataLayer/"]
+RUN dotnet restore "./NivBot/NivBot.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/NivBot"
 RUN dotnet build "./NivBot.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

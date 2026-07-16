@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using NivBot.DataLayer.Models;
+using NivBot.DataLayer.TypeConfiguration;
 
 namespace NivBot.DataLayer
 {
@@ -26,13 +27,36 @@ namespace NivBot.DataLayer
         public DbSet<GoodplaceSkillTask> GoodplaceSkillTasks => Set<GoodplaceSkillTask>();
         public DbSet<GoodplaceActivityTask> GoodplaceActivityTasks => Set<GoodplaceActivityTask>();
         public DbSet<RunescapeStat> RunescapeStats => Set<RunescapeStat>();
-        public DbSet<SkillEntity> SkillEntities => Set<SkillEntity>();
+        public DbSet<Skill> SkillEntities => Set<Skill>();
         public DbSet<ActivityCompetition> ActivityCompetitions => Set<ActivityCompetition>();
         public DbSet<SkillCompetition> SkillCompetitions => Set<SkillCompetition>();
         public DbSet<GlobalActivityBlocklist> GlobalActivityBlockLists => Set<GlobalActivityBlocklist>();
         public DbSet<ActivityTaskBlocklist> ActivityTaskBlockLists => Set<ActivityTaskBlocklist>();
         public DbSet<SkillTaskBlocklist> SkillTaskBlockLists => Set<SkillTaskBlocklist>();
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ActivityBlocklistEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ActivityCompetitionEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ActivityEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ActivityLogEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CollectionLogEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CompetitionProviderDetailsEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DiscordMessageEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GlobalActivityBlocklistEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceActivityTaskEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceShopItemEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceSkillTaskEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceUserEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceShopItemEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(RunescapeAccountEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(RunescapeStatEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SkillBlocklistEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SkillCompetitionEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SkillEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(WalletEntityTypeConfiguration).Assembly);
+
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => (
                 optionsBuilder

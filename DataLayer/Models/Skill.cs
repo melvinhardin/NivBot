@@ -4,7 +4,7 @@ using System.Text;
 using NivBot.DataLayer.Enums;
 namespace NivBot.DataLayer.Models
 {
-    public class SkillEntity
+    public class Skill
     {
         public Skills Id { get; set; }
         public required string Name { get; set; }

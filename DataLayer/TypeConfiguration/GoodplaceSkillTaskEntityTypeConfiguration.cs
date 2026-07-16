@@ -21,7 +21,7 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .HasOne<SkillEntity>()
+                .HasOne<Skill>()
                 .WithMany()
                 .HasForeignKey(x => x.Skill)
                 .HasPrincipalKey(x => x.Id)

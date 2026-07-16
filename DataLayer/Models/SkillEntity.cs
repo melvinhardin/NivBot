@@ -7,7 +7,7 @@ namespace NivBot.DataLayer.Models
     public class SkillEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public int HiscoreIndex { get; set; }
     }
 }

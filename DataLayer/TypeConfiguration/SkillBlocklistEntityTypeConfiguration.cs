@@ -20,6 +20,12 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .HasForeignKey(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
             
+            builder
+                .HasOne<SkillEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.Skill)
+                .HasPrincipalKey(x => x.Id)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

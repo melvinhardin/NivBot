@@ -21,7 +21,13 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .HasForeignKey<RunescapeStat>(x => x.RunescapeAccountId)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            
+            builder
+                .HasOne<SkillEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.Skill)
+                .HasPrincipalKey(x => x.Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder
                 .ToTable(t => t.HasCheckConstraint("CK_RunescapeStat_Xp", "xp >= 0 AND xp < 200000000"));
         }

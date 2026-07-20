@@ -7,10 +7,11 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using NivBot.DataLayer.Models;
 using NivBot.DataLayer.TypeConfiguration;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace NivBot.DataLayer
 {
-    public abstract class GoodplaceContext : DbContext
+    public class GoodplaceContext : DbContext
     {
         public bool LoggingEnabled { get; set; }
 
@@ -41,7 +42,7 @@ namespace NivBot.DataLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => (
                 optionsBuilder
-                    .UseNpgsql()
+                    .UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres")
                     .UseValidationCheckConstraints()
             )
                 .EnableSensitiveDataLogging()

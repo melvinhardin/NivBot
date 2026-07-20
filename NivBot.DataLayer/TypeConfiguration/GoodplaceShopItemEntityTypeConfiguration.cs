@@ -17,7 +17,7 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
             builder
-                .ToTable<GoodplaceShopItem>(t => t.HasCheckConstraint("CK_GoodplaceShopItem_Price", "price >= 0"));
+                .ToTable<GoodplaceShopItem>(t => t.HasCheckConstraint("CK_GoodplaceShopItem_Price", "\"Price\" >= 0"));
         }
     }
 }

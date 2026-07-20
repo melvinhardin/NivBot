@@ -27,7 +27,7 @@ namespace NivBot.DataLayer.TypeConfiguration
             builder
                 .ToTable(t =>
                     {
-                        t.HasCheckConstraint("CK_ActivityLog_Amount", "amount >= 0");
+                        t.HasCheckConstraint("CK_ActivityLog_Amount", "\"Amount\" >= 0");
                     }
                 );
             

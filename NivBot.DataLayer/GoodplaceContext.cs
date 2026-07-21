@@ -23,17 +23,19 @@ namespace NivBot.DataLayer
         public DbSet<Item> Items => Set<Item>();
         public DbSet<Activity> Activities => Set<Activity>();
         public DbSet<DiscordMessage> DiscordMessages => Set<DiscordMessage>();
-        public DbSet<GoodplaceShopItem> GoodplaceShopItems => Set<GoodplaceShopItem>();
         public DbSet<CompetitionProviderDetails> CompetitionProvidersDetails => Set<CompetitionProviderDetails>();
         public DbSet<GoodplaceSkillTask> GoodplaceSkillTasks => Set<GoodplaceSkillTask>();
         public DbSet<GoodplaceActivityTask> GoodplaceActivityTasks => Set<GoodplaceActivityTask>();
         public DbSet<RunescapeStat> RunescapeStats => Set<RunescapeStat>();
-        public DbSet<Skill> SkillEntities => Set<Skill>();
+        public DbSet<Skill> Skills => Set<Skill>();
         public DbSet<ActivityCompetition> ActivityCompetitions => Set<ActivityCompetition>();
         public DbSet<SkillCompetition> SkillCompetitions => Set<SkillCompetition>();
         public DbSet<GlobalActivityBlocklist> GlobalActivityBlockLists => Set<GlobalActivityBlocklist>();
         public DbSet<ActivityTaskBlocklist> ActivityTaskBlockLists => Set<ActivityTaskBlocklist>();
         public DbSet<SkillTaskBlocklist> SkillTaskBlockLists => Set<SkillTaskBlocklist>();
+        public DbSet<DiscordRole> DiscordRoles => Set<DiscordRole>();
+        public DbSet<SkillRank> SkillRanks => Set<SkillRank>();
+        public DbSet<ActivityRank> ActivityRanks => Set<ActivityRank>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

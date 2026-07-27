@@ -37,25 +37,10 @@ namespace NivBot.DataLayer
         public DbSet<SkillRank> SkillRanks => Set<SkillRank>();
         public DbSet<ActivityRank> ActivityRanks => Set<ActivityRank>();
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) =>
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GoodplaceContext).Assembly);
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => (
-                optionsBuilder
-                    .UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres")
-                    .UseValidationCheckConstraints()
-            )
-                .EnableSensitiveDataLogging()
-                .LogTo(
-                    s =>
-                    {
-                        if (LoggingEnabled)
-                        {
-                            Console.WriteLine(s);
-                        }
-                }, LogLevel.Information);
         
     }
 }

@@ -1,4 +1,5 @@
-﻿using NivBot.ExternalServicesLayer.OsrsAPI.Models;
+﻿using Microsoft.AspNetCore.Http;
+using NivBot.ExternalServicesLayer.OsrsAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
@@ -6,19 +7,20 @@ using System.Text;
 
 namespace NivBot.ExternalServicesLayer.OsrsAPI
 {
-    internal class OsrsHighscoreService : IOsrsHighscoreService
+    public sealed class OsrsHighscoreService(HttpClient client) : IOsrsHighscoreService
     {
-        private readonly HttpClient _httpClient;
-        
-
-        public OsrsHighscoreService(HttpClient httpClient)
+        public async Task<PlayerStats?> GetPlayerStatsAsync(string name)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://secure.runescape.com/m=hiscore_oldschool/index_lite.json");
-        }
-        public async Task<PlayerStats> GetPlayerStatsAsync(string name)
-        {
-            return await _httpClient.GetFromJsonAsync<PlayerStats>($"?player={name}");
+            try { 
+                var response = await client.GetAsync($"index_lite.json?player={Uri.EscapeDataString(name)}");
+                response.EnsureSuccessStatusCode();
+                PlayerStats? content = await response.Content.ReadFromJsonAsync<PlayerStats>();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

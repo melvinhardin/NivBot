@@ -17,10 +17,12 @@
     <PackageReference Include="NetCord.Hosting.AspNetCore" Version="1.0.0-beta.11" />
     <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-beta.11" />
     <PackageReference Include="NetCord.Services" Version="1.0.0-beta.11" />
+	<ProjectReference Include="..\NivBot.DataLayer\NivBot.DataLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NivBot.DataLayer\NivBot.DataLayer.csproj" />
+    <Folder Include="Netcord\Interactions\" />
+    <Folder Include="Netcord\Preconditions\" />
   </ItemGroup>
 
 </Project>

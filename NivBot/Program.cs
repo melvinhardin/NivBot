@@ -8,20 +8,29 @@ using NetCord.Hosting.Services.ApplicationCommands;
 using NetCord.Logging;
 using NivBot.DataLayer;
 using NivBot.ExternalServicesLayer.OsrsAPI;
+using NivBot.Netcord.Modules;
 using System.ComponentModel;
 using System.Text.Json;
 
-
+// Do all of the DI
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+// Add the DI for the OsrsAPI
 builder.Services
     .AddHttpClient<IOsrsHighscoreService, OsrsHighscoreService>(client => {
         client.BaseAddress = new Uri("https://secure.runescape.com/m=hiscore_oldschool/");
     });
+// Add the DI for Netcord
 builder.Services
     .AddDiscordGateway()
     .AddApplicationCommands();
+
+// Add the DI for the DbContext
 builder.Services
     .AddDataLayer(builder.Configuration, true);
+
+// Testing more DI
+builder.Services.AddScoped<LinkOsrsAccountService>();
 
 IHost app = builder.Build();
 

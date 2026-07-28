@@ -17,8 +17,8 @@ namespace NivBot.DataLayer.TypeConfiguration
 
             builder
                 .HasOne<RunescapeAccount>(x => x.RunescapeAccount)
-                .WithOne(x => x.RunescapeStat)
-                .HasForeignKey<RunescapeStat>(x => x.RunescapeAccountId)
+                .WithMany(x => x.RunescapeStats)
+                .HasForeignKey(x => x.RunescapeAccountId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder

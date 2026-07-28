@@ -20,9 +20,4 @@
 	<ProjectReference Include="..\NivBot.DataLayer\NivBot.DataLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Netcord\Interactions\" />
-    <Folder Include="Netcord\Preconditions\" />
-  </ItemGroup>
-
 </Project>

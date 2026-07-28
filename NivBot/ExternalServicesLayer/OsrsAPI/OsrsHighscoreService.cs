@@ -9,6 +9,7 @@ namespace NivBot.ExternalServicesLayer.OsrsAPI
 {
     public sealed class OsrsHighscoreService(HttpClient client) : IOsrsHighscoreService
     {
+        // Try to get the highscore from osrs, if a 404 is thrown return null
         public async Task<PlayerStats?> GetPlayerStatsAsync(string name)
         {
             try { 

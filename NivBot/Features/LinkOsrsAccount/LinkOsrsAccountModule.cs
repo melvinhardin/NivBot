@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NivBot.Features.LinkOsrsAccount
 {
-    public class OsrsDbModules(LinkOsrsAccountService addOsrsAcc) : ApplicationCommandModule<ApplicationCommandContext>
+    public class LinkOsrsAccountModule(LinkOsrsAccountService addOsrsAcc) : ApplicationCommandModule<ApplicationCommandContext>
     {
 
         // Check if the user is already in the Db, and if the account doesn't already exists in the db, lastly check if the account exists on the highscores
@@ -29,15 +29,15 @@ namespace NivBot.Features.LinkOsrsAccount
             {
                 reply = await addOsrsAcc.LinkAccountAsync((long)Context.User.Id, osrsname) switch
                 {
-                    LinkAccountResult.FailureNotOnHighscores =>
+                    LinkOsrsAccountResult.FailureNotOnHighscores =>
                         "Account not found on highscores",
-                    LinkAccountResult.FailureOsrsNameAlreadyTaken =>
+                    LinkOsrsAccountResult.FailureOsrsNameAlreadyTaken =>
                         "Account already linked to a user",
-                    LinkAccountResult.FailureUserNotRegistered =>
+                    LinkOsrsAccountResult.FailureUserNotRegistered =>
                         "You are not registered, please register with /register",
-                    LinkAccountResult.SuccessAccountAdded =>
+                    LinkOsrsAccountResult.SuccessAccountAdded =>
                         $"Your account {osrsname} has been linked.",
-                    LinkAccountResult.FailureDatabaseSaveFailed =>
+                    LinkOsrsAccountResult.FailureDatabaseSaveFailed =>
                         "Something went wrong during saving, try again or contact an admin if this error reoccurs.",
                     _ => "Something terrible happened!"
                 };

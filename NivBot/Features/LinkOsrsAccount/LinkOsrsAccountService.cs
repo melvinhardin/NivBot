@@ -9,23 +9,23 @@ namespace NivBot.Features.LinkOsrsAccount
 {
     public class LinkOsrsAccountService(IOsrsHighscoreService osrsApi, GoodplaceContext db)
     {
-        public async Task<LinkAccountResult> LinkAccountAsync(long discId, string osrsname)
+        public async Task<LinkOsrsAccountResult> LinkAccountAsync(long discId, string osrsname)
         {
             // Get all the needed information and check failure states, exit if fail
 
             // Check if the user is registered
             GoodplaceUser? user = await db.GoodplaceUsers
                 .FirstOrDefaultAsync(x => x.DiscordUserId == discId);
-            if (user == null) { return LinkAccountResult.FailureUserNotRegistered; }
+            if (user == null) { return LinkOsrsAccountResult.FailureUserNotRegistered; }
 
             // Check if the API is up and the account exists
             PlayerStats? osrsAccount = await osrsApi.GetPlayerStatsAsync(osrsname);
-            if (osrsAccount == null) { return LinkAccountResult.FailureNotOnHighscores; }
+            if (osrsAccount == null) { return LinkOsrsAccountResult.FailureNotOnHighscores; }
 
             // Check if the runescape account already exists in the database
             RunescapeAccount? accountExists = await db.RunescapeAccounts
                 .FirstOrDefaultAsync(x => x.RunescapeName == osrsname);
-            if (accountExists != null) { return LinkAccountResult.FailureOsrsNameAlreadyTaken; }
+            if (accountExists != null) { return LinkOsrsAccountResult.FailureOsrsNameAlreadyTaken; }
 
             // Create a dictionary of existing activities for insert
             var activitiesDict = await db.Activities
@@ -57,9 +57,9 @@ namespace NivBot.Features.LinkOsrsAccount
             }
             catch(Exception ex)
             {
-                return LinkAccountResult.FailureDatabaseSaveFailed;
+                return LinkOsrsAccountResult.FailureDatabaseSaveFailed;
             }
-            return LinkAccountResult.SuccessAccountAdded;
+            return LinkOsrsAccountResult.SuccessAccountAdded;
         }
     }
 }

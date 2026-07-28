@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NivBot.Features.LinkOsrsAccount
 {
-    public enum LinkAccountResult
+    public enum LinkOsrsAccountResult
     {
         FailureUserNotRegistered,
         FailureNotOnHighscores,

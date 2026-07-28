@@ -8,6 +8,7 @@ namespace NivBot.DataLayer.Models
     {
         public int Id { get; set; }
         public required string RunescapeName { get; set; }
+        public bool syncedColLog { get; set; } = false;
         public int GoodplaceUserId { get; set; }
         public GoodplaceUser GoodplaceUser { get; set; }
         public ICollection<CollectionLog> CollectionLogs { get; set; }

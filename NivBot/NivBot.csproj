@@ -20,4 +20,9 @@
 	<ProjectReference Include="..\NivBot.DataLayer\NivBot.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExternalServicesLayer\TempleAPI\Models\" />
+    <Folder Include="Features\SyncCollections\" />
+  </ItemGroup>
+
 </Project>

@@ -42,7 +42,7 @@ namespace NivBot.Features.LinkOsrsAccount
                     _ => "Something terrible happened!"
                 };
             }
-            catch
+            catch (Exception ex)
             {
                 reply = "Something went wrong, try again later.";
             }

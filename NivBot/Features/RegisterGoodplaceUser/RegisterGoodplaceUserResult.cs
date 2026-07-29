@@ -7,6 +7,8 @@ namespace NivBot.Features.RegisterGoodplaceUser
     public enum RegisterGoodplaceUserResult
     {
         Failure,
+        FailureUserAlreadyExists,
+        FailureSavingToDb,
         Success
     }
 }

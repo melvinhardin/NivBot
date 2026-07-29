@@ -29,8 +29,8 @@ namespace NivBot.Features.LinkOsrsAccount
 
             // Create a dictionary of existing activities for insert
             var activitiesDict = await db.Activities
-                .Select(x => new { x.OsrsId, x.Id })
-                .ToDictionaryAsync(y => y.OsrsId, y => y.Id);
+                .Select(x => new { x.OsrsName, x.Id })
+                .ToDictionaryAsync(y => y.OsrsName, y => y.Id);
 
             // Create the query for adding a new osrs account
             RunescapeAccount runescapeAccount = new RunescapeAccount
@@ -45,7 +45,7 @@ namespace NivBot.Features.LinkOsrsAccount
                 ActivityLogs = osrsAccount.Activities
                     .Select(a => new ActivityLog
                     {
-                        ActivityId = activitiesDict[a.Id],
+                        ActivityId = activitiesDict[a.Name],
                         Amount = a.Score
                     })
                     .ToList<ActivityLog>()

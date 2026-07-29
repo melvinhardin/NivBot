@@ -7,15 +7,17 @@ namespace NivBot.DataLayer
 {
     public static class ServiceCollectionExtensions
     {
+        // TODO: Change this to a DbContextFactory for future background jobs
         public static IServiceCollection AddDataLayer(
-            this IServiceCollection services, IConfiguration config, bool isDev) => services.AddDbContext<GoodplaceContext>(o =>
+            this IServiceCollection services, IConfiguration config, bool isDev) => services.AddDbContext<GoodplaceContext>(x =>
             {
-                o
+                x
                 .UseNpgsql(config.GetConnectionString("Goodplace"))
                 .UseValidationCheckConstraints();
 
                 if (isDev)
-                    o.EnableSensitiveDataLogging();
+                    x.EnableSensitiveDataLogging();
             });
+
     }
 }

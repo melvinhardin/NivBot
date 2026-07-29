@@ -18,8 +18,8 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
             builder
-                .Property(x => x.OsrsName)
-                .IsRequired();
+                .HasIndex(x => x.OsrsName)
+                .IsUnique();
 
             builder
                 .Property(x => x.Points);

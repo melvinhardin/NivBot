@@ -4,23 +4,30 @@ using Microsoft.Extensions.Hosting;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
+using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
 using NetCord.Logging;
 using NivBot.DataLayer;
 using NivBot.ExternalServicesLayer.OsrsAPI;
-using NivBot.Netcord.Modules;
+using NivBot.Features.LinkOsrsAccount;
+using NivBot.Features.RegisterGoodplaceUser;
+using NivBot.Features.SyncActivities;
 using System.ComponentModel;
 using System.Text.Json;
+// testing
+
 
 // Do all of the DI
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 // Add the DI for the OsrsAPI
 builder.Services
-    .AddHttpClient<IOsrsHighscoreService, OsrsHighscoreService>(client => {
+    .AddHttpClient<IOsrsHighscoreService, OsrsHighscoreService>(client =>
+    {
         client.BaseAddress = new Uri("https://secure.runescape.com/m=hiscore_oldschool/");
     });
 // Add the DI for Netcord
+
 builder.Services
     .AddDiscordGateway()
     .AddApplicationCommands();
@@ -29,16 +36,16 @@ builder.Services
 builder.Services
     .AddDataLayer(builder.Configuration, true);
 
-// Testing more DI
+// Adding slash commands DI.2
 builder.Services.AddScoped<LinkOsrsAccountService>();
+builder.Services.AddScoped<RegisterGoodplaceUserService>();
+builder.Services.AddScoped<SyncActivitiesService>();
 
 IHost app = builder.Build();
 
-//using (IServiceScope scope = app.Services.CreateScope())
-//{
-//    var hs = app.Services.GetRequiredService<IOsrsHighscoreService>();
-//    var stats = await hs.GetPlayerStatsAsync("Ni123v Lem");
-//    Console.WriteLine(JsonSerializer.Serialize(stats, new JsonSerializerOptions { WriteIndented = true }));
-//}
+// Add the application commands
+app.AddModules(typeof(Program).Assembly);
+
+
 
 await app.RunAsync();

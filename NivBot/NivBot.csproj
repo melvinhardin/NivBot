@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExternalServicesLayer\TempleAPI\Models\" />
-    <Folder Include="Features\SyncCollections\" />
+    <Folder Include="Features\SyncUserCollections\" />
   </ItemGroup>
 
 </Project>

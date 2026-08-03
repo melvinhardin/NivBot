@@ -9,6 +9,7 @@ using NetCord.Hosting.Services.ApplicationCommands;
 using NetCord.Logging;
 using NivBot.DataLayer;
 using NivBot.ExternalServicesLayer.OsrsAPI;
+using NivBot.ExternalServicesLayer.TempleAPI;
 using NivBot.Features.LinkOsrsAccount;
 using NivBot.Features.RegisterGoodplaceUser;
 using NivBot.Features.SyncActivities;
@@ -26,25 +27,38 @@ builder.Services
     {
         client.BaseAddress = new Uri("https://secure.runescape.com/m=hiscore_oldschool/");
     });
-// Add the DI for Netcord
-
+// Add the DI for the TempleAPI
 builder.Services
-    .AddDiscordGateway()
-    .AddApplicationCommands();
+    .AddHttpClient<ITempleService, TempleService>(client =>
+    {
+        client.BaseAddress = new Uri("https://templeosrs.com/api/");
+    });
 
-// Add the DI for the DbContext
-builder.Services
-    .AddDataLayer(builder.Configuration, true);
 
-// Adding slash commands DI.2
-builder.Services.AddScoped<LinkOsrsAccountService>();
-builder.Services.AddScoped<RegisterGoodplaceUserService>();
-builder.Services.AddScoped<SyncActivitiesService>();
+//// Add the DI for Netcord
+
+//builder.Services
+//    .AddDiscordGateway()
+//    .AddApplicationCommands();
+
+//// Add the DI for the DbContext
+//builder.Services
+//    .AddDataLayer(builder.Configuration, true);
+
+//// Adding slash commands DI.2
+//builder.Services.AddScoped<LinkOsrsAccountService>();
+//builder.Services.AddScoped<RegisterGoodplaceUserService>();
+//builder.Services.AddScoped<SyncActivitiesService>();
 
 IHost app = builder.Build();
 
-// Add the application commands
-app.AddModules(typeof(Program).Assembly);
+var temple = app.Services.GetRequiredService<ITempleService>();
+var test = await temple.GetGroupCollectionsAsync(56);
+Console.WriteLine("-----");
+Console.WriteLine(test);
+Console.WriteLine("-----");
+//// Add the application commands
+//app.AddModules(typeof(Program).Assembly);
 
 
 

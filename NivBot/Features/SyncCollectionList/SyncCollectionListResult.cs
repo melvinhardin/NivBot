@@ -6,5 +6,9 @@ namespace NivBot.Features.SyncCollectionList
 {
     public enum SyncCollectionListResult
     {
+        FailureTempleApiConnection,
+        FailureDbConnection,
+        FailureDbSave,
+        SuccessSync,
     }
 }

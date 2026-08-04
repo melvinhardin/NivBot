@@ -15,6 +15,7 @@ using NivBot.Features.RegisterGoodplaceUser;
 using NivBot.Features.SyncActivities;
 using System.ComponentModel;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 // testing
 
 
@@ -49,14 +50,23 @@ builder.Services
 //builder.Services.AddScoped<LinkOsrsAccountService>();
 //builder.Services.AddScoped<RegisterGoodplaceUserService>();
 //builder.Services.AddScoped<SyncActivitiesService>();
-
+//builder.Services.AddScoped<SyncCollectionListService>();
 IHost app = builder.Build();
 
 var temple = app.Services.GetRequiredService<ITempleService>();
 var test = await temple.GetGroupCollectionsAsync(56);
-Console.WriteLine("-----");
-Console.WriteLine(test);
-Console.WriteLine("-----");
+//var test2 = await temple.GetItemListAsync();
+
+
+var options = new JsonSerializerOptions
+{
+    WriteIndented = true,
+    ReferenceHandler = ReferenceHandler.IgnoreCycles  // drop if not EF entities
+};
+
+var path = Path.Combine(AppContext.BaseDirectory, "models.json");
+File.WriteAllText(path, JsonSerializer.Serialize(test, options));
+Console.WriteLine(path);   // print it so you can paste into the browser
 //// Add the application commands
 //app.AddModules(typeof(Program).Assembly);
 

@@ -8,7 +8,7 @@ namespace NivBot.ExternalServicesLayer.TempleAPI
 {
     public interface ITempleService
     {
-        Task<TempleGroup?> GetGroupCollectionsAsync(int groupId);
-        Task<Dictionary<string, string>?> GetItemListAsync();
+        Task<List<ParsedMember>> GetGroupCollectionsAsync(int groupId);
+        Task<Dictionary<int, string>?> GetItemListAsync();
     }
 }

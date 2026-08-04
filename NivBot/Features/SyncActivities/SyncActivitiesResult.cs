@@ -7,7 +7,6 @@ namespace NivBot.Features.SyncActivities
     public enum SyncActivitiesResult
     {
         Success,
-        Failure,
         FailureOsrsApiConnection,
         FailureDbConnection,
         FailureNameChange,

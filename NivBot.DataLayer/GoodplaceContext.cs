@@ -7,12 +7,16 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using NivBot.DataLayer.Models;
 using NivBot.DataLayer.TypeConfiguration;
-using Microsoft.EntityFrameworkCore.Design;
+
 
 namespace NivBot.DataLayer
 {
     public class GoodplaceContext : DbContext
     {
+        public GoodplaceContext(DbContextOptions<GoodplaceContext> options)
+        : base(options)
+        {
+        }
         public bool LoggingEnabled { get; set; }
 
         public DbSet<Wallet> Wallets => Set<Wallet>();

@@ -12,9 +12,9 @@ namespace NivBot.DataLayer
             this IServiceCollection services, IConfiguration config, bool isDev) => services.AddDbContext<GoodplaceContext>(x =>
             {
                 x
-                .UseNpgsql(config.GetConnectionString("Goodplace"))
+                .UseNpgsql(config.GetConnectionString("Goodplace"), y => y.MigrationsAssembly("NivBot"))
                 .UseValidationCheckConstraints();
-
+                
                 if (isDev)
                     x.EnableSensitiveDataLogging();
             });

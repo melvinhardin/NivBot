@@ -17,6 +17,8 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Design;
+using NivBot.Features.SyncCollectionList;
+using NivBot.Features.SyncUserCollections;
 // testing
 
 
@@ -51,21 +53,18 @@ builder.Services
 
 //// Adding slash commands DI.2
 builder.Services.AddScoped<LinkOsrsAccountService>();
-//
-//
 builder.Services.AddScoped<RegisterGoodplaceUserService>();
 builder.Services.AddScoped<SyncActivitiesService>();
-//builder.Services.AddScoped<SyncCollectionListService>();
+builder.Services.AddScoped<SyncCollectionListService>();
+builder.Services.AddScoped<SyncOsrsAccountCollectionService>();
 IHost app = builder.Build();
+var createAccount = app.Services.GetRequiredService<RegisterGoodplaceUserService>();
 var test = app.Services.GetRequiredService<SyncActivitiesService>();
 var test2 = app.Services.GetRequiredService<LinkOsrsAccountService>();
-await test.SyncActivities();
-await test2.LinkAccountAsync(123, "niv lem");
-//await test.RegisterGoodplaceUser(123);
-//var temple = app.Services.GetRequiredService<ITempleService>();
-//var test = await temple.GetGroupCollectionsAsync(56);
-////var test2 = await temple.GetItemListAsync();
+var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
+var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
 
+await test4.SyncGroupAccountCollog(948);
 
 //var options = new JsonSerializerOptions
 //{

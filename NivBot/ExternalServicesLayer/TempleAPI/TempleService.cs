@@ -1,5 +1,6 @@
 ﻿using NivBot.ExternalServicesLayer.TempleAPI.Models;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 
 namespace NivBot.ExternalServicesLayer.TempleAPI
 {
@@ -28,6 +29,16 @@ namespace NivBot.ExternalServicesLayer.TempleAPI
             return parsedMemberData;
             
         }
+
+        public async Task<SingleMember> GetAccountCollection(string osrsName)
+        {
+            string requestUrl = $"collection-log/player_collection_log.php?player={Uri.EscapeDataString(osrsName)}&categories=all&onlyitems=1";
+            var response = await httpClient.GetAsync(requestUrl);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<SingleMember>();
+            return content;
+        }
+
 
         // Gets a list of all items in the collectionlog currently on Templeosrs from the https://templeosrs.com/api_doc.php#Clog_List_Items endpoint. Returns a <int, string> Dictionary
         public async Task<Dictionary<int, string>?> GetItemListAsync()

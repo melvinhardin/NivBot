@@ -29,7 +29,7 @@ namespace NivBot.DataLayer.TypeConfiguration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
-                .ToTable(t => t.HasCheckConstraint("CK_RunescapeStat_Xp", "\"Xp\" >= 0 AND \"Xp\" < 200000000"));
+                .ToTable(t => t.HasCheckConstraint("CK_RunescapeStat_Xp", "\"Xp\" >= 0 AND \"Xp\" <= 200000000"));
         }
     }
 }

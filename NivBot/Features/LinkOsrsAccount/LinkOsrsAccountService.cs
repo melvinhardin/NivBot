@@ -35,11 +35,11 @@ namespace NivBot.Features.LinkOsrsAccount
             // Create the query for adding a new osrs account
             RunescapeAccount runescapeAccount = new RunescapeAccount
             {
-                RunescapeName = osrsname,
+                RunescapeName = osrsname.ToLower(),
                 GoodplaceUserId = user.Id,
                 RunescapeStats = Enum
                     .GetValues<DataLayer.Enums.Skills>()
-                    .Select(s => new RunescapeStat { Skill = s, Xp = osrsAccount.Skills[(int)s].Xp })
+                    .Select(s => new RunescapeStat { Skill = s, Xp = (int)osrsAccount.Skills[(int)s].Xp })
                     .ToList<RunescapeStat>(),
 
                 ActivityLogs = osrsAccount.Activities

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NetCord;
 using NivBot.DataLayer;
 using NivBot.DataLayer.Models;
 using NivBot.ExternalServicesLayer.TempleAPI;
@@ -12,18 +13,41 @@ namespace NivBot.Features.SyncUserCollections
     {
         public async Task<SyncOsrsAccountCollectionResult> SyncOsrsAccountCollog(string osrsAccount)
         {
+            var onlineAccountCollog = await templeApi.GetAccountCollection(osrsAccount);
+
+            // check if account is in the database
+            RunescapeAccount account;
+            try { account = await db.RunescapeAccounts.Where(x => x.RunescapeName == osrsAccount).FirstAsync(); }
+            catch (ArgumentNullException) { return SyncOsrsAccountCollectionResult.FailureNotImplemented; }
+
+            List<CollectionLog> dbCollogList;
+            // Either make an empty list if the user doesnt have a collog, or populate it with existing data 
+            if (!account.syncedColLog) { dbCollogList = new(); }
+            else { dbCollogList = account.CollectionLogs.ToList(); }
+
+            
+            
+
+            
             return SyncOsrsAccountCollectionResult.FailureNotImplemented;
         }
         public async Task<SyncOsrsAccountCollectionResult> SyncGroupAccountCollog(int groupId)
         {
+            // Get the list from the API
             var groupCollog = await templeApi.GetGroupCollectionsAsync(groupId);
+
+            // Get the lists from the db
             var dbCollogs = await db.CollectionLogs.ToListAsync();
             var dbItems = await db.Items.ToListAsync();
+            var dbAccounts = await db.RunescapeAccounts.ToListAsync();
             foreach (var osrsCharacter in groupCollog)
             {
+                RunescapeAccount? currentId = dbAccounts.Find(x => x.RunescapeName.Equals(osrsCharacter.OsrsName.ToLower()));
+                Console.WriteLine(currentId);
+                Console.WriteLine(osrsCharacter.OsrsName);
                 // Continue to next iteration if character doesn't exist
-                if (!dbCollogs.Any(y => y.RunescapeAccount.RunescapeName == osrsCharacter.OsrsName))
-                { continue; }
+                if(currentId is null) { continue; }
+
 
                 // Make a list to capture any new collogs
                 List<CollectionLog> newItems = new();
@@ -37,7 +61,7 @@ namespace NivBot.Features.SyncUserCollections
                     // If the character doesnt have the item add it to the new item list.
                     if (
                     !dbCollogs
-                        .Where(y => y.RunescapeAccount.RunescapeName == osrsCharacter.OsrsName)
+                        .Where(y => y.RunescapeAccountId == currentId.Id)
                         .Any(x => x.Item.OsrsId == item.OsrsId)
                         )
                     {
@@ -46,20 +70,20 @@ namespace NivBot.Features.SyncUserCollections
                             {
                                 Amount = item.Amount,
                                 ItemId = dbItems.First(y => y.OsrsId == item.OsrsId).Id,
-                                RunescapeAccountId = dbCollogs.First(y => y.RunescapeAccount.RunescapeName == osrsCharacter.OsrsName).RunescapeAccountId
+                                RunescapeAccountId = currentId.Id
                             }
                         );
                         continue;
                     }
 
                     // Set the amount of the item
-                    dbCollogs
+                    db.CollectionLogs
                         .Where(y => y.Item.OsrsId == item.OsrsId)
-                        .Where(z => z.RunescapeAccount.RunescapeName == osrsCharacter.OsrsName)
+                        .Where(z => z.RunescapeAccountId == currentId.Id)
                         .First().Amount = item.Amount;
 
                 }
-                dbCollogs.AddRange(newItems);
+                db.CollectionLogs.AddRange(newItems);
             }
             await db.SaveChangesAsync();
 

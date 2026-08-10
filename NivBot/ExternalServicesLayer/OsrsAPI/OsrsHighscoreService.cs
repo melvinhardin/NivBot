@@ -12,16 +12,12 @@ namespace NivBot.ExternalServicesLayer.OsrsAPI
         // Try to get the highscore from osrs, if a 404 is thrown return null
         public async Task<PlayerStats?> GetPlayerStatsAsync(string name)
         {
-            try { 
+            
                 var response = await httpClient.GetAsync($"index_lite.json?player={Uri.EscapeDataString(name)}");
                 response.EnsureSuccessStatusCode();
                 PlayerStats? content = await response.Content.ReadFromJsonAsync<PlayerStats>();
                 return content;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            
         }
     }
 }

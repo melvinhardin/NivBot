@@ -10,5 +10,6 @@ namespace NivBot.ExternalServicesLayer.TempleAPI
     {
         Task<List<ParsedMember>> GetGroupCollectionsAsync(int groupId);
         Task<Dictionary<int, string>?> GetItemListAsync();
+        Task<SingleMember> GetAccountCollection(string osrsName);
     }
 }

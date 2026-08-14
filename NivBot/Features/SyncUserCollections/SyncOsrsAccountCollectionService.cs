@@ -13,25 +13,10 @@ namespace NivBot.Features.SyncUserCollections
     public class SyncOsrsAccountCollectionService(GoodplaceContext db, ITempleService templeApi)
     {
         public async Task<SyncOsrsAccountCollectionResult> SyncOsrsAccountCollog(string osrsAccount)
-        {
-            var onlineAccountCollog = await templeApi.GetAccountCollection(osrsAccount);
-
-            // check if account is in the database
-            RunescapeAccount account;
-            try { account = await db.RunescapeAccounts.Where(x => x.RunescapeName == osrsAccount).FirstAsync(); }
-            catch (ArgumentNullException) { return SyncOsrsAccountCollectionResult.FailureNotImplemented; }
-
-            List<CollectionLog> dbCollogList;
-            // Either make an empty list if the user doesnt have a collog, or populate it with existing data 
-            if (!account.syncedColLog) { dbCollogList = new(); }
-            else { dbCollogList = account.CollectionLogs.ToList(); }
-
-            
-            
-
-            
+        { 
             return SyncOsrsAccountCollectionResult.FailureNotImplemented;
         }
+
         public async Task<SyncOsrsAccountCollectionResult> SyncGroupAccountCollog(int groupId)
         {
             // Get the list from the API

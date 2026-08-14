@@ -3,6 +3,7 @@ using NetCord;
 using NivBot.DataLayer;
 using NivBot.DataLayer.Models;
 using NivBot.ExternalServicesLayer.TempleAPI;
+using NivBot.ExternalServicesLayer.TempleAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,60 +35,86 @@ namespace NivBot.Features.SyncUserCollections
         public async Task<SyncOsrsAccountCollectionResult> SyncGroupAccountCollog(int groupId)
         {
             // Get the list from the API
-            var groupCollog = await templeApi.GetGroupCollectionsAsync(groupId);
+            List<ParsedMember> groupCollog = await templeApi.GetGroupCollectionsAsync(groupId);
 
-            // Get the lists from the db
-            var dbCollogs = await db.CollectionLogs.ToListAsync();
-            var dbItems = await db.Items.ToListAsync();
-            var dbAccounts = await db.RunescapeAccounts.ToListAsync();
+            // Make a hashset from the names to use in the db query
+            HashSet<string> names = groupCollog
+                .Select(x => x.OsrsName.ToLowerInvariant())
+                .ToHashSet();
+
+            // Get the relevant names from the db
+            Dictionary<string, RunescapeAccount> accounts = await db.RunescapeAccounts
+                .Where(x => names.Contains(x.RunescapeName))
+                .ToDictionaryAsync(x => x.RunescapeName);
+            
+            // Get the internal account id's
+            int[] accountIds = accounts.Values.Select(x => x.Id).ToArray();
+
+            // Get all userId's of accounts
+            int[] userIds = accounts.Values.Select(x => x.GoodplaceUserId).Distinct().ToArray();
+
+            // Get the wallets linked on accountId's
+            Dictionary<int, Wallet> wallets = await db.Wallets
+                .Where(x => userIds.Contains(x.GoodplaceUserId))
+                .ToDictionaryAsync(y => y.GoodplaceUserId);
+
+
+            // Get the internal item id's and points, here item1 is the id, item2 is the points.
+            Dictionary<int, (int, int)> itemIds = await db.Items.ToDictionaryAsync(x => x.OsrsId, x =>( x.Id, x.Points));
+
+            // Query for the existing collectionlogs
+            Dictionary<(int, int), CollectionLog> existingLogs = await db.CollectionLogs
+                .Where(x => accountIds.Contains(x.RunescapeAccountId))
+                .ToDictionaryAsync(y => (y.RunescapeAccountId, y.ItemId));
+
             foreach (var osrsCharacter in groupCollog)
             {
-                RunescapeAccount? currentId = dbAccounts.Find(x => x.RunescapeName.Equals(osrsCharacter.OsrsName.ToLower()));
-                Console.WriteLine(currentId);
-                Console.WriteLine(osrsCharacter.OsrsName);
-                // Continue to next iteration if character doesn't exist
-                if(currentId is null) { continue; }
-
-
-                // Make a list to capture any new collogs
-                List<CollectionLog> newItems = new();
-
-                foreach(var item in osrsCharacter.Items)
+                // Skip to the next character if not in the db
+                if (!accounts.TryGetValue(osrsCharacter.OsrsName.ToLowerInvariant(), out var account))
+                { continue; }
+                foreach (var item in osrsCharacter.Items)
                 {
-                    // Go to next item if it doesnt exist in the db TODO add a way to call on the item sync funtion maybe?
-                    if(!dbItems.Any(y => y.OsrsId == item.OsrsId))
-                    { continue; }
-
-                    // If the character doesnt have the item add it to the new item list.
-                    if (
-                    !dbCollogs
-                        .Where(y => y.RunescapeAccountId == currentId.Id)
-                        .Any(x => x.Item.OsrsId == item.OsrsId)
-                        )
+                    // Skip to the next item if not in the db
+                    if (!itemIds.TryGetValue(item.OsrsId, out var itemId))
                     {
-                        newItems.Add(
-                            new CollectionLog
-                            {
-                                Amount = item.Amount,
-                                ItemId = dbItems.First(y => y.OsrsId == item.OsrsId).Id,
-                                RunescapeAccountId = currentId.Id
-                            }
-                        );
                         continue;
                     }
 
-                    // Set the amount of the item
-                    db.CollectionLogs
-                        .Where(y => y.Item.OsrsId == item.OsrsId)
-                        .Where(z => z.RunescapeAccountId == currentId.Id)
-                        .First().Amount = item.Amount;
-
+                    // Make sure to get item 1, this is the id
+                    if (existingLogs.TryGetValue((account.Id, itemId.Item1), out var log))
+                    {
+                        if (log.Amount < item.Amount)
+                        {
+                            // Getting Items2 are the points assigned to the collog
+                            // We can safely take the difference between the two because we already check if item.Amount is higher
+                            if (account.syncedColLog) { wallets[account.GoodplaceUserId].GoodplacePoints += (itemId.Item2 * (item.Amount - log.Amount)); }
+                            if (account.syncedColLog) { wallets[account.GoodplaceUserId].GoodplaceCurrency += (itemId.Item2 * (item.Amount - log.Amount)); }
+                            // Make sure we set the log amount after so we can get the difference before
+                            log.Amount = item.Amount;
+                        }
+                    }
+                    else
+                    {
+                        var newCollectionLog = new CollectionLog
+                        {
+                            Amount = item.Amount,
+                            ItemId = itemId.Item1,
+                            RunescapeAccountId = account.Id
+                        };
+                        db.CollectionLogs.Add(newCollectionLog);
+                        // Award points and currency
+                        if (account.syncedColLog) { wallets[account.GoodplaceUserId].GoodplacePoints += (itemId.Item2 * item.Amount); }
+                        if (account.syncedColLog) { wallets[account.GoodplaceUserId].GoodplaceCurrency += (itemId.Item2 * item.Amount); }
+                        existingLogs[(account.Id, itemId.Item1)] = newCollectionLog;
+                    }
                 }
-                db.CollectionLogs.AddRange(newItems);
+                // When we're done adding collectionlogs set the collog flag to synced if it wasn't
+                if (!account.syncedColLog) { account.syncedColLog = true; }
+
+                
             }
             await db.SaveChangesAsync();
-
-            return SyncOsrsAccountCollectionResult.Failure;
+            return SyncOsrsAccountCollectionResult.Success;
 
         }
     }

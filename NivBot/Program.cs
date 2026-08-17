@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetCord;
@@ -10,15 +11,15 @@ using NetCord.Logging;
 using NivBot.DataLayer;
 using NivBot.ExternalServicesLayer.OsrsAPI;
 using NivBot.ExternalServicesLayer.TempleAPI;
+using NivBot.Features.GoodplaceTask;
 using NivBot.Features.LinkOsrsAccount;
 using NivBot.Features.RegisterGoodplaceUser;
 using NivBot.Features.SyncActivities;
+using NivBot.Features.SyncCollectionList;
+using NivBot.Features.SyncUserCollections;
 using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore.Design;
-using NivBot.Features.SyncCollectionList;
-using NivBot.Features.SyncUserCollections;
 // testing
 
 
@@ -57,15 +58,18 @@ builder.Services.AddScoped<RegisterGoodplaceUserService>();
 builder.Services.AddScoped<SyncActivitiesService>();
 builder.Services.AddScoped<SyncCollectionListService>();
 builder.Services.AddScoped<SyncOsrsAccountCollectionService>();
+builder.Services.AddScoped<GoodplaceTaskService>();
+
+
 IHost app = builder.Build();
 var createAccount = app.Services.GetRequiredService<RegisterGoodplaceUserService>();
 var test = app.Services.GetRequiredService<SyncActivitiesService>();
 var test2 = app.Services.GetRequiredService<LinkOsrsAccountService>();
 var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
 var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
-
-await test4.SyncGroupAccountCollog(948);
-
+var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
+//await test4.SyncGroupAccountCollog(948);
+await test5.GetGoodplaceSkillTask(1);
 //var options = new JsonSerializerOptions
 //{
 //    WriteIndented = true,

@@ -1,6 +1,9 @@
-﻿using NivBot.DataLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using NivBot.DataLayer;
+using NivBot.DataLayer.Enums;
 using NivBot.ExternalServicesLayer.OsrsAPI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,20 +11,94 @@ namespace NivBot.Features.GoodplaceTask
 {
     public class GoodplaceTaskService(GoodplaceContext db, IOsrsHighscoreService osrsHighscore)
     {
-        public void GetGoodplaceSkillTask(long discordId)
+        public async Task<GoodplaceTaskResult> GetGoodplaceSkillTask(long discordId)
         {
-            // See if the discord user exists in the db
+            // Get All available skill tasks (all skills)
+            var availableTasks = Enum
+                .GetValues(typeof(Skills))
+                .Cast<Skills>()
+                .ToList();
 
+            // Global skill blocklist
+            List<Skills> globalBlockList = new List<Skills> { Skills.Attack, Skills.Defence, Skills.Strength, Skills.Magic, Skills.Hitpoints, Skills.Ranged, Skills.Prayer };
+
+
+            // Get the user blocklist
+            var userBlockList = await db.SkillTaskBlockLists
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .Select(x => x.Skill)
+                .ToListAsync();
+            
+            // See if the discord user exists in the db
+            // See if the user has runescape accounts
             // Collect skill data on the all of the users runescape accounts
+            var xpList = await db.RunescapeStats
+                .Where(x => x.RunescapeAccount.GoodplaceUser.DiscordUserId == discordId)
+                .ToListAsync();
+            
+            // Exit if the xpList is empty (no account)
+            if (xpList.Count == 0) { return GoodplaceTaskResult.FailureNotImplemented; }
+
+            // Get the current task (if it exists)
+            var currentTask = await db.GoodplaceSkillTasks
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .FirstOrDefaultAsync();
 
             // Check if the user has completed the existing Task and award points
 
-            // Give a task
-                
+            if (currentTask != null)
+            {
+                // Sum the xp (as a long because it's over all their account)
+                // Compare the aggregated data against the goal xp
+                // Exit if xp is lower than the goal amount (task not completed)
+                if (
+                    xpList
+                    .Where(x => x.Skill == currentTask.Skill)
+                    .Select(x => x.Xp)
+                    .Aggregate(0L, (a,b) => a+b) < currentTask.GoalXp
+                    )
+                {
+                    return GoodplaceTaskResult.FailureNotImplemented;
+                }
+
+                Console.WriteLine(currentTask.GoalXp);
+            }
             
+            // A very silly workaround for the first task of the user
+            // We set the current task to one in the global blocklist, the method checks for this
+            // Not very efficient, but this is what I came up with, with my current C# knowledge
+            var newTask = GetRandomTask<Skills>(availableTasks,globalBlockList,userBlockList, Skills.Attack);
+            Console.WriteLine(newTask);
+
+            Console.WriteLine(xpList
+                    .Where(x => x.Skill == newTask)
+                    .Select(x => x.Xp)
+                    .Aggregate(0L, (a, b) => a + b));
+            
+            //foreach (var letter in xpList)
+            //{
+            //    Console.WriteLine(letter.Skill);
+            //}
 
 
+            // Give a task
+
+
+
+            return GoodplaceTaskResult.FailureNotImplemented;
         }
+
+        // A Helper method to return a random task, generic so that it works with skill or activity tasks.
+        static private T GetRandomTask<T>(List<T> availableTasks, List<T> globalBlocklist, List<T> userBlocklist, T currentTask)
+        {
+            // If current task is null it means it does not exist.
+            if (globalBlocklist.Contains(currentTask)) { availableTasks.Remove(currentTask); }
+            availableTasks = availableTasks.Except(globalBlocklist).Except(userBlocklist).ToList();
+            Random rnd = new Random();
+            int r = rnd.Next(availableTasks.Count);
+            return availableTasks[r];
+        }
+
         public void GetGoodplaceBossTask(long discordId)
         {
             // See if the discord user exists in the db

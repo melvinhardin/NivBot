@@ -75,13 +75,7 @@ namespace NivBot.Features.GoodplaceTask
                     .Select(x => x.Xp)
                     .Aggregate(0L, (a, b) => a + b));
             
-            //foreach (var letter in xpList)
-            //{
-            //    Console.WriteLine(letter.Skill);
-            //}
-
-
-            // Give a task
+            
 
 
 
@@ -91,12 +85,15 @@ namespace NivBot.Features.GoodplaceTask
         // A Helper method to return a random task, generic so that it works with skill or activity tasks.
         static private T GetRandomTask<T>(List<T> availableTasks, List<T> globalBlocklist, List<T> userBlocklist, T currentTask)
         {
-            // If current task is null it means it does not exist.
-            if (globalBlocklist.Contains(currentTask)) { availableTasks.Remove(currentTask); }
+            // For first task the current task will always be in the global blocklist, remove the currenttask
+            if (!globalBlocklist.Contains(currentTask)) { availableTasks.Remove(currentTask); }
+
+            // Removing all tasks in the blocklists
             availableTasks = availableTasks.Except(globalBlocklist).Except(userBlocklist).ToList();
+
+            // New random seed and return a random task
             Random rnd = new Random();
-            int r = rnd.Next(availableTasks.Count);
-            return availableTasks[r];
+            return availableTasks[rnd.Next(availableTasks.Count)];
         }
 
         public void GetGoodplaceBossTask(long discordId)

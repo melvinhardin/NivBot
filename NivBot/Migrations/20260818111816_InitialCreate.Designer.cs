@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NivBot.Migrations
 {
     [DbContext(typeof(GoodplaceContext))]
-    [Migration("20260810082841_InitialCreate")]
+    [Migration("20260818111816_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -265,21 +265,16 @@ namespace NivBot.Migrations
                     b.Property<int>("GoodplaceUserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Skill")
-                        .HasColumnType("integer");
-
                     b.Property<long>("GoalXp")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Skill")
+                        .HasColumnType("integer");
 
                     b.Property<long>("SummedCurrentXp")
                         .HasColumnType("bigint");
 
-                    b.HasKey("GoodplaceUserId", "Skill");
-
-                    b.HasIndex("GoodplaceUserId")
-                        .IsUnique();
-
-                    b.HasIndex("Skill");
+                    b.HasKey("GoodplaceUserId");
 
                     b.ToTable("GoodplaceSkillTasks");
                 });
@@ -755,12 +750,6 @@ namespace NivBot.Migrations
                         .WithOne("GoodplaceSkillTask")
                         .HasForeignKey("NivBot.DataLayer.Models.GoodplaceSkillTask", "GoodplaceUserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NivBot.DataLayer.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("Skill")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GoodplaceUser");

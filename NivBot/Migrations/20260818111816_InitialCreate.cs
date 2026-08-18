@@ -256,6 +256,26 @@ namespace NivBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GoodplaceSkillTasks",
+                columns: table => new
+                {
+                    GoodplaceUserId = table.Column<int>(type: "integer", nullable: false),
+                    Skill = table.Column<int>(type: "integer", nullable: false),
+                    SummedCurrentXp = table.Column<long>(type: "bigint", nullable: false),
+                    GoalXp = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GoodplaceSkillTasks", x => x.GoodplaceUserId);
+                    table.ForeignKey(
+                        name: "FK_GoodplaceSkillTasks_GoodplaceUsers_GoodplaceUserId",
+                        column: x => x.GoodplaceUserId,
+                        principalTable: "GoodplaceUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RunescapeAccounts",
                 columns: table => new
                 {
@@ -293,32 +313,6 @@ namespace NivBot.Migrations
                         principalTable: "GoodplaceUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GoodplaceSkillTasks",
-                columns: table => new
-                {
-                    GoodplaceUserId = table.Column<int>(type: "integer", nullable: false),
-                    Skill = table.Column<int>(type: "integer", nullable: false),
-                    SummedCurrentXp = table.Column<long>(type: "bigint", nullable: false),
-                    GoalXp = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GoodplaceSkillTasks", x => new { x.GoodplaceUserId, x.Skill });
-                    table.ForeignKey(
-                        name: "FK_GoodplaceSkillTasks_GoodplaceUsers_GoodplaceUserId",
-                        column: x => x.GoodplaceUserId,
-                        principalTable: "GoodplaceUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GoodplaceSkillTasks_Skills_Skill",
-                        column: x => x.Skill,
-                        principalTable: "Skills",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -533,17 +527,6 @@ namespace NivBot.Migrations
                 name: "IX_GoodplaceActivityTasks_ActivityId",
                 table: "GoodplaceActivityTasks",
                 column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GoodplaceSkillTasks_GoodplaceUserId",
-                table: "GoodplaceSkillTasks",
-                column: "GoodplaceUserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GoodplaceSkillTasks_Skill",
-                table: "GoodplaceSkillTasks",
-                column: "Skill");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GoodplaceUsers_DiscordUserId",

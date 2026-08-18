@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NivBot.DataLayer;
 using NivBot.DataLayer.Enums;
+using NivBot.DataLayer.Models;
 using NivBot.ExternalServicesLayer.OsrsAPI;
 using System;
 using System.Collections;
@@ -29,7 +30,6 @@ namespace NivBot.Features.GoodplaceTask
                 .Select(x => x.Skill)
                 .ToListAsync();
             
-            // See if the discord user exists in the db
             // See if the user has runescape accounts
             // Collect skill data on the all of the users runescape accounts
             var xpList = await db.RunescapeStats
@@ -44,45 +44,75 @@ namespace NivBot.Features.GoodplaceTask
                 .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
                 .FirstOrDefaultAsync();
 
-            // Check if the user has completed the existing Task and award points
+            var userWallet = await db.Wallets
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .FirstAsync();
 
-            if (currentTask != null)
-            {
-                // Sum the xp (as a long because it's over all their account)
-                // Compare the aggregated data against the goal xp
-                // Exit if xp is lower than the goal amount (task not completed)
-                if (
-                    xpList
-                    .Where(x => x.Skill == currentTask.Skill)
-                    .Select(x => x.Xp)
-                    .Aggregate(0L, (a,b) => a+b) < currentTask.GoalXp
-                    )
-                {
-                    return GoodplaceTaskResult.FailureNotImplemented;
-                }
-
-                Console.WriteLine(currentTask.GoalXp);
-            }
+            // Prepare variables.
+            Skills newTask;
+            bool awardPoints = false;
             
-            // A very silly workaround for the first task of the user
-            // We set the current task to one in the global blocklist, the method checks for this
-            // Not very efficient, but this is what I came up with, with my current C# knowledge
-            var newTask = GetRandomTask<Skills>(availableTasks,globalBlockList,userBlockList, Skills.Attack);
-            Console.WriteLine(newTask);
-
-            Console.WriteLine(xpList
+            // Check if this is the users first task
+            if (currentTask == null)
+            {
+                // A very silly workaround for the first task of the user
+                // We set the current task to one in the global blocklist, the method checks for this
+                // Not very efficient, but this is what I came up with, with my current knowledge
+                newTask = GetRandomTask<Skills>(availableTasks, globalBlockList, userBlockList, Skills.Attack);
+                GoodplaceSkillTask newSkillTask = new GoodplaceSkillTask
+                {
+                    GoodplaceUserId = userWallet.GoodplaceUserId,
+                    SummedCurrentXp = xpList
                     .Where(x => x.Skill == newTask)
                     .Select(x => x.Xp)
-                    .Aggregate(0L, (a, b) => a + b));
-            
-            
+                    .Aggregate(0L, (a, b) => a + b),
+                    GoalXp = 1,
+                    Skill = newTask
+                };
+                db.GoodplaceSkillTasks.Add(newSkillTask);
+            }
+            else
+            {
+                // Check if the user has completed the existing Task and award points
 
+                
+                // Compare the aggregated data against the goal xp
+                if (xpList
+                    .Where(x => x.Skill == currentTask.Skill)
+                    .Select(x => x.Xp)
+                    .Aggregate(0L, (total, b) => total + b) < currentTask.GoalXp)
+                {
+                    // Exit if xp is lower than the goal amount (task not completed)
+                    return GoodplaceTaskResult.FailureNotImplemented;
+                }
+                newTask = GetRandomTask<Skills>(availableTasks, globalBlockList, userBlockList, Skills.Attack);
+                awardPoints = true;
 
+                // Change the task to the new one
+                currentTask.SummedCurrentXp = xpList
+                    .Where(x => x.Skill == newTask)
+                    .Select(x => x.Xp)
+                    .Aggregate(0L, (a, b) => a + b);
+                currentTask.GoalXp = 1;
+                currentTask.Skill = newTask;
+            }
+
+            // Award points if a task was completed
+            if (awardPoints) 
+            {
+                userWallet.GoodplacePoints += 5;
+                userWallet.GoodplaceCurrency += 5;
+            }
+            await db.SaveChangesAsync();
+
+            // Get the current total
+
+            Console.WriteLine();
 
             return GoodplaceTaskResult.FailureNotImplemented;
         }
 
-        // A Helper method to return a random task, generic so that it works with skill or activity tasks.
+        // A Helper method to return a random task, generic so that it works for skill or activity tasks.
         static private T GetRandomTask<T>(List<T> availableTasks, List<T> globalBlocklist, List<T> userBlocklist, T currentTask)
         {
             // For first task the current task will always be in the global blocklist, remove the currenttask
@@ -96,8 +126,16 @@ namespace NivBot.Features.GoodplaceTask
             return availableTasks[rnd.Next(availableTasks.Count)];
         }
 
-        public void GetGoodplaceBossTask(long discordId)
+        public async Task GetGoodplaceBossTask(long discordId)
         {
+            // Get all the existing activities
+            //var availableTasks = await db.Activities.SelectMany(x =>  x.Id , x => x.OsrsName);
+
+            // Get the global and userblocklists.
+
+            var userBlocklist = await db.ActivityTaskBlockLists.Where(x => x.GoodplaceUser.DiscordUserId == discordId).Select(x => x.Activity).ToListAsync();
+
+
             // See if the discord user exists in the db
 
             // Collect activity data on the all of the users runescape accounts

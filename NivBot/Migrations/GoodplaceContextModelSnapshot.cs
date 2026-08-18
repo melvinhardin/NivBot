@@ -262,21 +262,16 @@ namespace NivBot.Migrations
                     b.Property<int>("GoodplaceUserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Skill")
-                        .HasColumnType("integer");
-
                     b.Property<long>("GoalXp")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Skill")
+                        .HasColumnType("integer");
 
                     b.Property<long>("SummedCurrentXp")
                         .HasColumnType("bigint");
 
-                    b.HasKey("GoodplaceUserId", "Skill");
-
-                    b.HasIndex("GoodplaceUserId")
-                        .IsUnique();
-
-                    b.HasIndex("Skill");
+                    b.HasKey("GoodplaceUserId");
 
                     b.ToTable("GoodplaceSkillTasks");
                 });
@@ -752,12 +747,6 @@ namespace NivBot.Migrations
                         .WithOne("GoodplaceSkillTask")
                         .HasForeignKey("NivBot.DataLayer.Models.GoodplaceSkillTask", "GoodplaceUserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NivBot.DataLayer.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("Skill")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GoodplaceUser");

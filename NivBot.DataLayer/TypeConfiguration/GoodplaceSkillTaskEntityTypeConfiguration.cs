@@ -12,20 +12,13 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<GoodplaceSkillTask> builder)
         {
             builder
-                .HasKey(x => new { x.GoodplaceUserId, x.Skill });
+                .HasKey(x => x.GoodplaceUserId);
 
             builder
                 .HasOne<GoodplaceUser>(x => x.GoodplaceUser)
                 .WithOne(x => x.GoodplaceSkillTask)
                 .HasForeignKey<GoodplaceSkillTask>(x => x.GoodplaceUserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .HasOne<Skill>()
-                .WithMany()
-                .HasForeignKey(x => x.Skill)
-                .HasPrincipalKey(x => x.Id)
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

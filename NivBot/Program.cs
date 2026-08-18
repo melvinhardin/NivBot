@@ -69,6 +69,10 @@ var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
 var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
 var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 //await test4.SyncGroupAccountCollog(948);
+//await test.SyncActivities();
+//await test3.SyncItemList();
+//await createAccount.RegisterGoodplaceUser(1L);
+//await test2.LinkAccountAsync(1L, "niv lem");
 await test5.GetGoodplaceSkillTask(1);
 //var options = new JsonSerializerOptions
 //{

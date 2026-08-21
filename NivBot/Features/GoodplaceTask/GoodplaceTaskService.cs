@@ -128,15 +128,20 @@ namespace NivBot.Features.GoodplaceTask
 
         public async Task GetGoodplaceBossTask(long discordId)
         {
-            // Get all the existing activities
-            //var availableTasks = await db.Activities.SelectMany(x =>  x.Id , x => x.OsrsName);
+            var allActivites = await db.Activities.ToListAsync();
 
             // Get the global and userblocklists.
+            var userWallet = await db.Wallets
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .ToListAsync();
+            var userBlocklist = await db.ActivityTaskBlockLists
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .Select(x => x.Activity).ToListAsync();
+            var globalBlocklist = await db.Activities.Where(x => userBlocklist.Contains(x.Id));
 
-            var userBlocklist = await db.ActivityTaskBlockLists.Where(x => x.GoodplaceUser.DiscordUserId == discordId).Select(x => x.Activity).ToListAsync();
 
 
-            // See if the discord user exists in the db
+            
 
             // Collect activity data on the all of the users runescape accounts
 

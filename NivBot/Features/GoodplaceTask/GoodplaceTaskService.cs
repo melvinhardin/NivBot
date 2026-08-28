@@ -66,6 +66,7 @@ namespace NivBot.Features.GoodplaceTask
                     .Where(x => x.Skill == newTask)
                     .Select(x => x.Xp)
                     .Aggregate(0L, (a, b) => a + b),
+                    // TODO add a method to generate a goal based on xph
                     GoalXp = 1,
                     Skill = newTask
                 };
@@ -85,7 +86,7 @@ namespace NivBot.Features.GoodplaceTask
                     // Exit if xp is lower than the goal amount (task not completed)
                     return GoodplaceTaskResult.FailureNotImplemented;
                 }
-                newTask = GetRandomTask<Skills>(availableTasks, globalBlockList, userBlockList, Skills.Attack);
+                newTask = GetRandomTask<Skills>(availableTasks, globalBlockList, userBlockList, currentTask.Skill);
                 awardPoints = true;
 
                 // Change the task to the new one
@@ -93,6 +94,7 @@ namespace NivBot.Features.GoodplaceTask
                     .Where(x => x.Skill == newTask)
                     .Select(x => x.Xp)
                     .Aggregate(0L, (a, b) => a + b);
+                // TODO add a method to generate a goal based on xph
                 currentTask.GoalXp = 1;
                 currentTask.Skill = newTask;
             }
@@ -105,17 +107,13 @@ namespace NivBot.Features.GoodplaceTask
             }
             await db.SaveChangesAsync();
 
-            // Get the current total
-
-            Console.WriteLine();
-
-            return GoodplaceTaskResult.FailureNotImplemented;
+            return GoodplaceTaskResult.Success;
         }
 
         // A Helper method to return a random task, generic so that it works for skill or activity tasks.
         static private T GetRandomTask<T>(List<T> availableTasks, List<T> globalBlocklist, List<T> userBlocklist, T currentTask)
         {
-            // For first task the current task will always be in the global blocklist, remove the currenttask
+            // For first task the current task will always be in the global blocklist, if not remove the currenttask
             if (!globalBlocklist.Contains(currentTask)) { availableTasks.Remove(currentTask); }
 
             // Removing all tasks in the blocklists
@@ -126,28 +124,86 @@ namespace NivBot.Features.GoodplaceTask
             return availableTasks[rnd.Next(availableTasks.Count)];
         }
 
-        public async Task GetGoodplaceBossTask(long discordId)
+        public async Task<GoodplaceTaskResult> GetGoodplaceBossTask(long discordId)
         {
-            // Load all of the tables needed. Activities, wallet, user and global blocklist,
-            var allActivites = await db.Activities.ToListAsync();
+            // Load all of the tables needed. Activities, wallet, user & global blocklist, current task
+            var allActivities = await db.Activities
+                .ToListAsync();
+            var userKillList = await db.ActivityLogs
+                .Where(x => x.RunescapeAccount.GoodplaceUser.DiscordUserId == discordId)
+                .Where(x => x.Amount > 0)
+                .ToListAsync();
             var userBlocklist = await db.ActivityTaskBlockLists
                 .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
-                .Select(x => x.Activity).ToListAsync();
-            var globalBlockHashSet = await db.GlobalActivityBlockLists.Select(x => x.ActivityId).ToHashSetAsync();
-            var globalActivityBlocks = allActivites.Where(x => globalBlockHashSet.Contains(x.Id)).ToList();
+                .Select(x => x.Activity)
+                .ToListAsync();
+            var globalBlockHashSet = await db.GlobalActivityBlockLists
+                .Select(x => x.ActivityId)
+                .ToHashSetAsync();
+            var globalActivityBlocks = allActivities
+                .Where(x => globalBlockHashSet
+                .Contains(x.Id))
+                .ToList();
             var userWallet = await db.Wallets
                 .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
                 .FirstAsync();
+            var currentTask = await db.GoodplaceActivityTasks
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .FirstOrDefaultAsync();
 
-            var currentTask = await db.GoodplaceActivityTasks.Where(x => x.GoodplaceUser.DiscordUserId == discordId).FirstOrDefaultAsync();
+            Activity newTask;
+            bool awardPoints = false;
+
             
+            if (currentTask == null)
+            {
+                newTask = GetRandomTask<Activity>(allActivities, globalActivityBlocks, userBlocklist, allActivities.FirstOrDefault());
+                GoodplaceActivityTask newActivityTask = new GoodplaceActivityTask
+                {
+                    GoodplaceUserId = userWallet.GoodplaceUserId,
+                    CurrentCumulativeAmount = userKillList
+                    .Where(x => x.Activity == newTask)
+                    .Select(x => x.Amount)
+                    .Aggregate(0, (a, b) => a + b),
+                    // TODO add a method to generate a random goal based on kph
+                    GoalAmount = 1,
+                    Activity = newTask
+                };
+                db.GoodplaceActivityTasks.Add(newActivityTask);
+                Console.WriteLine(newActivityTask.Activity.OsrsName);
+            }
+            else
+            {
+                if(userKillList
+                    .Where(x => x.ActivityId == currentTask.ActivityId)
+                    .Select(x => x.Amount)
+                    .Aggregate(0, (a, b) => a + b) < currentTask.GoalAmount)
+                {
+                    // Exit if kills are lower than the goal amount (task not completed)
+                    return GoodplaceTaskResult.FailureNotImplemented;
+                }
+                newTask = GetRandomTask<Activity>(allActivities, globalActivityBlocks, userBlocklist, allActivities.Where(x => x.Id == currentTask.ActivityId).First());
+                awardPoints = true;
+                // Change the task to the new one
+                currentTask.CurrentCumulativeAmount = userKillList
+                    .Where(x => x.ActivityId == newTask.Id)
+                    .Select(x => x.Amount)
+                    .Aggregate(0, (a, b) => a + b);
+                // TODO add a method to generate a goal based on kph
+                currentTask.GoalAmount = 1;
+                currentTask.ActivityId = newTask.Id;
+                Console.WriteLine(newTask.OsrsName);
+            }
 
+            // Award points if a task was completed
+            if (awardPoints)
+            {
+                userWallet.GoodplacePoints += 5;
+                userWallet.GoodplaceCurrency += 5;
+            }
+            await db.SaveChangesAsync();
 
-            // Collect activity data on the all of the users runescape accounts
-
-            // Check if the user has completed the existing Task and award points
-
-            // Give a task
+            return GoodplaceTaskResult.Success;
         }
 
         public void SkipGoodplaceTask(int taskId)

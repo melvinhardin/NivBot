@@ -73,7 +73,7 @@ var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 //await test3.SyncItemList();
 //await createAccount.RegisterGoodplaceUser(1L);
 //await test2.LinkAccountAsync(1L, "niv lem");
-await test5.GetGoodplaceSkillTask(1);
+await test5.GetGoodplaceBossTask(1);
 //var options = new JsonSerializerOptions
 //{
 //    WriteIndented = true,

@@ -77,8 +77,9 @@ var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 
 //await test5.GetGoodplaceBossTask(1);
 //await test5.GetGoodplaceBossTask(2);
-//await test5.SkipGoodplaceTask(2);
+
 await test5.GetGoodplaceBossTask(2);
+await test5.BlockGoodplaceTask(2, 0);
 //await test5.GetGoodplaceBossTask(2);
 //await test5.GetGoodplaceBossTask(2);
 //var options = new JsonSerializerOptions

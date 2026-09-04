@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NetCord;
 using NivBot.DataLayer;
 using NivBot.DataLayer.Enums;
 using NivBot.DataLayer.Models;
@@ -206,24 +207,76 @@ namespace NivBot.Features.GoodplaceTask
             return GoodplaceTaskResult.Success;
         }
 
-        public async Task SkipGoodplaceTask(int discordId)
+        /// <summary>
+        /// Removes a skilltask based on the tasktype
+        /// </summary>
+        /// <param name="discordId">Users Discord ID</param>
+        /// <param name="taskType">0 for activities, 1 for Skill tasks</param>
+        /// <returns></returns>
+        public async Task SkipGoodplaceTask(long discordId, int taskType)
         {
-            // Check which task
-            await db.GoodplaceActivityTasks
-                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
-                .ExecuteDeleteAsync();
-            // Clear the current task
+            switch (taskType){
+                case 0: 
+                    await db.GoodplaceActivityTasks
+                        .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                        .ExecuteDeleteAsync();
+                    break;
+                case 1:
+                    await db.GoodplaceSkillTasks
+                        .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                        .ExecuteDeleteAsync();
+                    break;
+            }
+            
+            // Save the deletion
             await db.SaveChangesAsync();
             
 
         }
-        public void BlockGoodplaceTask()
+
+        /// <summary>
+        /// Adds a task to the blocklist of the user that calls it.
+        /// </summary>
+        /// <param name="discordId">Users Discord ID</param>
+        /// <param name="taskType">0 for activities, 1 for Skill tasks</param>
+        /// <returns></returns>
+        public async Task BlockGoodplaceTask(long discordId, int taskType)
         {
-            // Check which task
             
-            // Add the current task to the userTaskBlockList
-            
-            // Skip the current task
+            switch (taskType)
+            {
+                case 0:
+                    var newActivityBlock = new ActivityTaskBlocklist
+                    {
+                        ActivityId = await db.GoodplaceActivityTasks
+                                        .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                                        .Select(x => x.ActivityId)
+                                        .FirstAsync(),
+                        GoodplaceUserId = await db.GoodplaceUsers.Where(x => x.DiscordUserId == discordId).Select(x => x.Id).FirstAsync(),
+
+                    };
+                    db.ActivityTaskBlockLists.Add(newActivityBlock);
+                    break;
+                case 1:
+                    var userSkillBlocklist = await db.SkillTaskBlockLists.Where(x => x.GoodplaceUser.DiscordUserId == discordId).ToListAsync();
+                    var newSkillBlock = new SkillTaskBlocklist
+                    {
+                        GoodplaceUserId = await db.GoodplaceUsers
+                            .Where(x => x.DiscordUserId == discordId)
+                            .Select(x => x.Id)
+                            .FirstAsync(),
+                        Skill = await db.GoodplaceSkillTasks
+                        .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                        .Select(x => x.Skill).FirstAsync()
+
+                    };
+                    db.SkillTaskBlockLists.Add(newSkillBlock);
+                    break;
+            }
+            await db.SaveChangesAsync();
+            // Clear the blocked Task
+            await SkipGoodplaceTask(discordId, taskType);
+
         }
 
     }

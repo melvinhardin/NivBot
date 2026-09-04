@@ -71,9 +71,16 @@ var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 //await test4.SyncGroupAccountCollog(948);
 //await test.SyncActivities();
 //await test3.SyncItemList();
-//await createAccount.RegisterGoodplaceUser(1L);
-//await test2.LinkAccountAsync(1L, "niv lem");
-await test5.GetGoodplaceBossTask(1);
+//await createAccount.RegisterGoodplaceUser(2L);
+//await test2.LinkAccountAsync(1L, "D en");
+
+
+//await test5.GetGoodplaceBossTask(1);
+//await test5.GetGoodplaceBossTask(2);
+//await test5.SkipGoodplaceTask(2);
+await test5.GetGoodplaceBossTask(2);
+//await test5.GetGoodplaceBossTask(2);
+//await test5.GetGoodplaceBossTask(2);
 //var options = new JsonSerializerOptions
 //{
 //    WriteIndented = true,

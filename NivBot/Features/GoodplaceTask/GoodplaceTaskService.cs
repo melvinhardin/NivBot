@@ -6,6 +6,7 @@ using NivBot.ExternalServicesLayer.OsrsAPI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace NivBot.Features.GoodplaceTask
@@ -170,11 +171,11 @@ namespace NivBot.Features.GoodplaceTask
                     Activity = newTask
                 };
                 db.GoodplaceActivityTasks.Add(newActivityTask);
-                Console.WriteLine(newActivityTask.Activity.OsrsName);
+
             }
             else
             {
-                if(userKillList
+                if (userKillList
                     .Where(x => x.ActivityId == currentTask.ActivityId)
                     .Select(x => x.Amount)
                     .Aggregate(0, (a, b) => a + b) < currentTask.GoalAmount)
@@ -192,7 +193,6 @@ namespace NivBot.Features.GoodplaceTask
                 // TODO add a method to generate a goal based on kph
                 currentTask.GoalAmount = 1;
                 currentTask.ActivityId = newTask.Id;
-                Console.WriteLine(newTask.OsrsName);
             }
 
             // Award points if a task was completed
@@ -206,12 +206,16 @@ namespace NivBot.Features.GoodplaceTask
             return GoodplaceTaskResult.Success;
         }
 
-        public void SkipGoodplaceTask(int taskId)
+        public async Task SkipGoodplaceTask(int discordId)
         {
             // Check which task
-
+            await db.GoodplaceActivityTasks
+                .Where(x => x.GoodplaceUser.DiscordUserId == discordId)
+                .ExecuteDeleteAsync();
             // Clear the current task
+            await db.SaveChangesAsync();
             
+
         }
         public void BlockGoodplaceTask()
         {

@@ -12,7 +12,12 @@ namespace NivBot.DataLayer.TypeConfiguration
         public void Configure(EntityTypeBuilder<DiscordRole> builder)
         {
             builder
-                .HasKey(x => x.DiscordId);
+                .HasKey(x => x.ActivityId);
+            builder
+                .HasOne(x => x.Activity)
+                .WithOne()
+                .HasForeignKey<DiscordRole>(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace NivBot.Features.GoodplaceTask
         {
             // Get All available skill tasks (all skills)
             var availableTasks = Enum
-                .GetValues(typeof(Skills))
+                .GetValues<Skills>()
                 .Cast<Skills>()
                 .ToList();
 

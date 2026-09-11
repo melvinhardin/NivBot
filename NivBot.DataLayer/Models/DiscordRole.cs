@@ -6,7 +6,10 @@ namespace NivBot.DataLayer.Models
 {
     public class DiscordRole
     {
-        public long DiscordId { get; set; }
-        public string RoleDescription { get; set; }
+        public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
+        public string DiscordRoleId { get; set; }
+        public int Threshold { get; set; }
+        
     }
 }

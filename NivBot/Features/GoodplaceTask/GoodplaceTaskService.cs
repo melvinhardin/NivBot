@@ -39,7 +39,7 @@ namespace NivBot.Features.GoodplaceTask
                 .ToListAsync();
             
             // Exit if the xpList is empty (no account)
-            if (xpList.Count == 0) { return GoodplaceTaskResult.FailureNotImplemented; }
+            if (xpList.Count == 0) { return GoodplaceTaskResult.FailureNoAccount; }
 
             // Get the current task (if it exists)
             var currentTask = await db.GoodplaceSkillTasks

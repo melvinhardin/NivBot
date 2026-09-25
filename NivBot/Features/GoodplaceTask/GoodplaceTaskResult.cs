@@ -8,6 +8,7 @@ namespace NivBot.Features.GoodplaceTask
     {
         Success,
         Failure,
+        FailureNoAccount,
         FailureNotImplemented
     }
 }

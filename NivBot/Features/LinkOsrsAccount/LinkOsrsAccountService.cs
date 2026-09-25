@@ -11,6 +11,9 @@ namespace NivBot.Features.LinkOsrsAccount
     {
         public async Task<LinkOsrsAccountResult> LinkAccountAsync(long discId, string osrsname)
         {
+            // Clean up the input string
+            osrsname = osrsname.ToLowerInvariant().Replace("_", " ").Replace("-", " ");
+
             // Get all the needed information and check failure states, exit if fail
 
             // Check if the user is registered
@@ -35,7 +38,7 @@ namespace NivBot.Features.LinkOsrsAccount
             // Create the query for adding a new osrs account
             RunescapeAccount runescapeAccount = new RunescapeAccount
             {
-                RunescapeName = osrsname.ToLower(),
+                RunescapeName = osrsname,
                 GoodplaceUserId = user.Id,
                 RunescapeStats = Enum
                     .GetValues<DataLayer.Enums.Skills>()

@@ -8,20 +8,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace NivBot.DataLayer.TypeConfiguration
 {
-    public class SkillRankEntityTypeConfiguration : IEntityTypeConfiguration<SkillRank>
+    public class ActivityRankEntityTypeConfiguration : IEntityTypeConfiguration<ActivityRank>
     {
-        public void Configure(EntityTypeBuilder<SkillRank> builder)
+        public void Configure(EntityTypeBuilder<ActivityRank> builder)
         {
             builder
                 .HasKey(x => x.Id);
             builder
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
+            builder
+                .HasOne<Activity>(x => x.Activity)
+                .WithMany()
+                .HasForeignKey(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasOne<DiscordRole>(x => x.DiscordRole)
                 .WithOne()
-                .HasForeignKey<SkillRank>(x => x.DiscordRoleId)
+                .HasForeignKey<ActivityRank>(x => x.DiscordRoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }

@@ -106,9 +106,6 @@ namespace NivBot.Migrations
                     b.Property<int>("ActivityId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
                     b.Property<long?>("DiscordRoleId")
                         .HasColumnType("bigint");
 
@@ -211,17 +208,22 @@ namespace NivBot.Migrations
 
             modelBuilder.Entity("NivBot.DataLayer.Models.DiscordRole", b =>
                 {
-                    b.Property<long>("DiscordId")
+                    b.Property<long>("DiscordRoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("DiscordId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("DiscordRoleId"));
 
-                    b.Property<string>("RoleDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("DiscordId");
+                    b.Property<int>("Threshold")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DiscordRoleId");
+
+                    b.HasIndex("ActivityId")
+                        .IsUnique();
 
                     b.ToTable("DiscordRoles");
                 });
@@ -570,10 +572,7 @@ namespace NivBot.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("DiscordRoleId")
+                    b.Property<long>("DiscordRoleId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Skill")
@@ -711,6 +710,17 @@ namespace NivBot.Migrations
                     b.Navigation("RunescapeAccount");
                 });
 
+            modelBuilder.Entity("NivBot.DataLayer.Models.DiscordRole", b =>
+                {
+                    b.HasOne("NivBot.DataLayer.Models.Activity", "Activity")
+                        .WithOne()
+                        .HasForeignKey("NivBot.DataLayer.Models.DiscordRole", "ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+                });
+
             modelBuilder.Entity("NivBot.DataLayer.Models.GlobalActivityBlocklist", b =>
                 {
                     b.HasOne("NivBot.DataLayer.Models.Activity", "Activity")
@@ -801,7 +811,8 @@ namespace NivBot.Migrations
                 {
                     b.HasOne("NivBot.DataLayer.Models.DiscordRole", "DiscordRole")
                         .WithOne()
-                        .HasForeignKey("NivBot.DataLayer.Models.SkillRank", "DiscordRoleId");
+                        .HasForeignKey("NivBot.DataLayer.Models.SkillRank", "DiscordRoleId")
+                        .IsRequired();
 
                     b.Navigation("DiscordRole");
                 });

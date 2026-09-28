@@ -11,7 +11,7 @@ namespace NivBot.Features.SyncUserCollections
     public class SyncOsrsAccountCollectionModulepublic (SyncOsrsAccountCollectionService syncAccountItems) : ApplicationCommandModule<ApplicationCommandContext>
     
     {
-        [SlashCommand("syncGroupItems", "Attempt to add all items from temple to collectionlogs")]
+        [SlashCommand("syncgroupitems", "Attempt to add all items from temple to collectionlogs")]
         public async Task SyncAccountItems([SlashCommandParameter(Name = "groupid", Description = "Id of the temple group to sync items from")] int groupid)
         {
             await Context.Interaction.SendResponseAsync(InteractionCallback.DeferredMessage(NetCord.MessageFlags.Ephemeral));

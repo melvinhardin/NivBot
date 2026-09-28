@@ -21,8 +21,9 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 // testing
-
-
+string osrsname = "niv lem";
+osrsname = osrsname.ToLower().Replace("_", " ").Replace("-", " ");
+Console.WriteLine(osrsname);
 // Do all of the DI
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 Console.WriteLine(builder.Configuration.GetConnectionString("Goodplace") ?? "<null>");
@@ -43,9 +44,9 @@ builder.Services
 
 //// Add the DI for Netcord
 
-//builder.Services
-//    .AddDiscordGateway()
-//    .AddApplicationCommands();
+builder.Services
+    .AddDiscordGateway()
+    .AddApplicationCommands();
 
 // Add the DI for the DbContext
 
@@ -62,12 +63,12 @@ builder.Services.AddScoped<GoodplaceTaskService>();
 
 
 IHost app = builder.Build();
-var createAccount = app.Services.GetRequiredService<RegisterGoodplaceUserService>();
-var test = app.Services.GetRequiredService<SyncActivitiesService>();
-var test2 = app.Services.GetRequiredService<LinkOsrsAccountService>();
-var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
-var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
-var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
+//var createAccount = app.Services.GetRequiredService<RegisterGoodplaceUserService>();
+//var test = app.Services.GetRequiredService<SyncActivitiesService>();
+//var test2 = app.Services.GetRequiredService<LinkOsrsAccountService>();
+//var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
+//var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
+//var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 //await test4.SyncGroupAccountCollog(948);
 //await test.SyncActivities();
 //await test3.SyncItemList();
@@ -78,8 +79,8 @@ var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
 //await test5.GetGoodplaceBossTask(1);
 //await test5.GetGoodplaceBossTask(2);
 
-await test5.GetGoodplaceBossTask(2);
-await test5.BlockGoodplaceTask(2, 0);
+//await test5.GetGoodplaceBossTask(2);
+//await test5.BlockGoodplaceTask(2, 0);
 //await test5.GetGoodplaceBossTask(2);
 //await test5.GetGoodplaceBossTask(2);
 //var options = new JsonSerializerOptions
@@ -92,7 +93,7 @@ await test5.BlockGoodplaceTask(2, 0);
 //File.WriteAllText(path, JsonSerializer.Serialize(test, options));
 //Console.WriteLine(path);   // print it so you can paste into the browser
 //// Add the application commands
-//app.AddModules(typeof(Program).Assembly);
+app.AddModules(typeof(Program).Assembly);
 
 
 

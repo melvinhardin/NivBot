@@ -25,27 +25,23 @@ namespace NivBot.Features.LinkOsrsAccount
             
             // Making sure whatever happens on the bot side, the user always gets a response. 
             string reply;
-            try
+            
+            reply = await addOsrsAcc.LinkAccountAsync((long)Context.User.Id, osrsname) switch
             {
-                reply = await addOsrsAcc.LinkAccountAsync((long)Context.User.Id, osrsname) switch
-                {
-                    LinkOsrsAccountResult.FailureNotOnHighscores =>
-                        "Account not found on highscores",
-                    LinkOsrsAccountResult.FailureOsrsNameAlreadyTaken =>
-                        "Account already linked to a user",
-                    LinkOsrsAccountResult.FailureUserNotRegistered =>
-                        "You are not registered, please register with /register",
-                    LinkOsrsAccountResult.SuccessAccountAdded =>
-                        $"Your account {osrsname} has been linked.",
-                    LinkOsrsAccountResult.FailureDatabaseSaveFailed =>
-                        "Something went wrong during saving, try again or contact an admin if this error reoccurs.",
-                    _ => "Something terrible happened!"
-                };
-            }
-            catch (Exception ex)
-            {
-                reply = "Something went wrong, try again later.";
-            }
+                LinkOsrsAccountResult.FailureNotOnHighscores =>
+                    "Account not found on highscores",
+                LinkOsrsAccountResult.FailureOsrsNameAlreadyTaken =>
+                    "Account already linked to a user",
+                LinkOsrsAccountResult.FailureUserNotRegistered =>
+                    "You are not registered, please register with /register",
+                LinkOsrsAccountResult.SuccessAccountAdded =>
+                    $"Your account {osrsname} has been linked.",
+                LinkOsrsAccountResult.FailureDatabaseSaveFailed =>
+                    "Something went wrong during saving, try again or contact an admin if this error reoccurs.",
+                _ => "Something terrible happened!"
+            };
+            
+            
             await Context.Interaction.ModifyResponseAsync(message => message.WithContent(reply));
 
         }

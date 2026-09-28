@@ -9,7 +9,8 @@ namespace NivBot.Features.GoodplaceTask
     public class GoodplaceTaskModule(GoodplaceTaskService goodplaceTask) : ApplicationCommandModule<ApplicationCommandContext>
     {
         [SlashCommand("skilltask", "Complete, Assign, Block or skip a skill task")]
-        public async Task getSkillTaskMenuAsync() {
+        public async Task getSkillTaskMenuAsync()
+        {
             await Context.Interaction.SendResponseAsync(InteractionCallback.DeferredMessage(NetCord.MessageFlags.Ephemeral));
             var reply = Context.Interaction.SendResponseAsync(
             InteractionCallback.Message(new InteractionMessageProperties
@@ -26,5 +27,6 @@ namespace NivBot.Features.GoodplaceTask
 
 
             );
+        }
     }
 }

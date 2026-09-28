@@ -9,8 +9,7 @@ namespace NivBot.DataLayer.Models
     {
         public int Id { get; set; }
         public Skills Skill { get; set; }
-        public long? DiscordRoleId { get; set; }
+        public long DiscordRoleId { get; set; }
         public DiscordRole DiscordRole { get; set; }
-        public int Amount { get; set; }
     }
 }

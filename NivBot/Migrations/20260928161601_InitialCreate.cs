@@ -61,19 +61,6 @@ namespace NivBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DiscordRoles",
-                columns: table => new
-                {
-                    DiscordId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleDescription = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DiscordRoles", x => x.DiscordId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GoodplaceUsers",
                 columns: table => new
                 {
@@ -117,6 +104,26 @@ namespace NivBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DiscordRoles",
+                columns: table => new
+                {
+                    DiscordRoleId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActivityId = table.Column<int>(type: "integer", nullable: false),
+                    Threshold = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiscordRoles", x => x.DiscordRoleId);
+                    table.ForeignKey(
+                        name: "FK_DiscordRoles_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GlobalActivityBlockLists",
                 columns: table => new
                 {
@@ -157,52 +164,6 @@ namespace NivBot.Migrations
                         principalTable: "CompetitionProvidersDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ActivityRanks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ActivityId = table.Column<int>(type: "integer", nullable: false),
-                    DiscordRoleId = table.Column<long>(type: "bigint", nullable: true),
-                    Amount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivityRanks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ActivityRanks_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActivityRanks_DiscordRoles_DiscordRoleId",
-                        column: x => x.DiscordRoleId,
-                        principalTable: "DiscordRoles",
-                        principalColumn: "DiscordId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SkillRanks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Skill = table.Column<int>(type: "integer", nullable: false),
-                    DiscordRoleId = table.Column<long>(type: "bigint", nullable: true),
-                    Amount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SkillRanks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SkillRanks_DiscordRoles_DiscordRoleId",
-                        column: x => x.DiscordRoleId,
-                        principalTable: "DiscordRoles",
-                        principalColumn: "DiscordId");
                 });
 
             migrationBuilder.CreateTable(
@@ -366,6 +327,50 @@ namespace NivBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ActivityRanks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActivityId = table.Column<int>(type: "integer", nullable: false),
+                    DiscordRoleId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityRanks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ActivityRanks_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivityRanks_DiscordRoles_DiscordRoleId",
+                        column: x => x.DiscordRoleId,
+                        principalTable: "DiscordRoles",
+                        principalColumn: "DiscordRoleId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SkillRanks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Skill = table.Column<int>(type: "integer", nullable: false),
+                    DiscordRoleId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SkillRanks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SkillRanks_DiscordRoles_DiscordRoleId",
+                        column: x => x.DiscordRoleId,
+                        principalTable: "DiscordRoles",
+                        principalColumn: "DiscordRoleId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ActivityLogs",
                 columns: table => new
                 {
@@ -524,6 +529,12 @@ namespace NivBot.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_DiscordRoles_ActivityId",
+                table: "DiscordRoles",
+                column: "ActivityId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GoodplaceActivityTasks_ActivityId",
                 table: "GoodplaceActivityTasks",
                 column: "ActivityId");
@@ -628,9 +639,6 @@ namespace NivBot.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Activities");
-
-            migrationBuilder.DropTable(
                 name: "RunescapeAccounts");
 
             migrationBuilder.DropTable(
@@ -644,6 +652,9 @@ namespace NivBot.Migrations
 
             migrationBuilder.DropTable(
                 name: "GoodplaceUsers");
+
+            migrationBuilder.DropTable(
+                name: "Activities");
         }
     }
 }

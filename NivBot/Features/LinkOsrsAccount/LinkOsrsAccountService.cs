@@ -12,19 +12,21 @@ namespace NivBot.Features.LinkOsrsAccount
         public async Task<LinkOsrsAccountResult> LinkAccountAsync(long discId, string osrsname)
         {
             // Clean up the input string
-            osrsname = osrsname.ToLowerInvariant().Replace("_", " ").Replace("-", " ");
+            osrsname = osrsname.ToLower().Replace("_", " ").Replace("-", " ");
 
             // Get all the needed information and check failure states, exit if fail
-
+            
             // Check if the user is registered
+            
             GoodplaceUser? user = await db.GoodplaceUsers
                 .FirstOrDefaultAsync(x => x.DiscordUserId == discId);
+            
             if (user == null) { return LinkOsrsAccountResult.FailureUserNotRegistered; }
 
             // Check if the API is up and the account exists
             PlayerStats? osrsAccount = await osrsApi.GetPlayerStatsAsync(osrsname);
             if (osrsAccount == null) { return LinkOsrsAccountResult.FailureNotOnHighscores; }
-
+            Console.WriteLine(osrsAccount.Skills.Count);
             // Check if the runescape account already exists in the database
             RunescapeAccount? accountExists = await db.RunescapeAccounts
                 .FirstOrDefaultAsync(x => x.RunescapeName == osrsname);

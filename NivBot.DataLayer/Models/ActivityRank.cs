@@ -12,7 +12,6 @@ namespace NivBot.DataLayer.Models
         public Activity Activity { get; set; }
         public long? DiscordRoleId { get; set; }
         public DiscordRole DiscordRole { get; set; }
-        public int Amount { get; set; }
 
     }
 }

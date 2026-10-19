@@ -1,0 +1,55 @@
+role_id,name,metric,target,threshold,close_trigger,tier_group,emoji
+844207417696059423,Sire Expert,ActivityScore,Abyssal Sire,10000,9000,,<:CollectorBadge:926004335014457456>
+815238275169124382,Hydra Expert,ActivityScore,Alchemical Hydra,10000,9000,,<:CollectorBadge:926004335014457456>
+815252944445505538,Barrows Expert,ActivityScore,Barrows Chests,5000,4500,,<:CollectorBadge:926004335014457456>
+870267114693468190,Bryophyta Expert,ActivityScore,Bryophyta,100,90,,<:CollectorBadge:926004335014457456>
+928459694643744888,Callisto Expert,ActivityScore,Callisto,1000,900,,<:CollectorBadge:926004335014457456>
+829804826224361503,Cerberus Expert,ActivityScore,Cerberus,10000,9000,,<:CollectorBadge:926004335014457456>
+815255474508136481,Chaos Fanatic Expert,ActivityScore,Chaos Fanatic,1000,900,,<:CollectorBadge:926004335014457456>
+844208236730908682,Sara Expert,ActivityScore,Commander Zilyana,10000,9000,,<:CollectorBadge:926004335014457456>
+815238212981096459,Bandos Expert,ActivityScore,General Graardor,10000,9000,,<:CollectorBadge:926004335014457456>
+844207902532304897,Mole Expert,ActivityScore,Giant Mole,10000,9000,,<:CollectorBadge:926004335014457456>
+844209518627258368,Grotesque Guardians Expert,ActivityScore,Grotesque Guardians,10000,9000,,<:CollectorBadge:926004335014457456>
+836989664606552136,Hespori Expert,ActivityScore,Hespori,100,90,,<:CollectorBadge:926004335014457456>
+844208053774581801,KQ Expert,ActivityScore,Kalphite Queen,10000,9000,,<:CollectorBadge:926004335014457456>
+815253142504603656,KBD Expert,ActivityScore,King Black Dragon,10000,9000,,<:CollectorBadge:926004335014457456>
+815253288122318848,Kraken Expert,ActivityScore,Kraken,10000,9000,,<:CollectorBadge:926004335014457456>
+844208441748750336,Armadyl Expert,ActivityScore,Kree'Arra,10000,9000,,<:CollectorBadge:926004335014457456>
+844208598166798338,Zammy Expert,ActivityScore,K'ril Tsutsaroth,10000,9000,,<:CollectorBadge:926004335014457456>
+869948430074675250,Obor Expert,ActivityScore,Obor,100,90,,<:CollectorBadge:926004335014457456>
+1002221463518060746,Nex Expert,ActivityScore,Nex,10000,9000,,<:CollectorBadge:926004335014457456>
+1036360650148024421,Crazy Archeologist Expert,ActivityScore,Crazy Archaeologist,1000,900,,<:CollectorBadge:926004335014457456>
+876194060480675971,Sarachnis Expert,ActivityScore,Sarachnis,10000,9000,,<:CollectorBadge:926004335014457456>
+923264415044866079,Scorpia Expert,ActivityScore,Scorpia,1000,900,,<:CollectorBadge:926004335014457456>
+826471952041639968,Thermy Expert,ActivityScore,Thermonuclear Smoke Devil,10000,9000,,<:CollectorBadge:926004335014457456>
+829804652408733786,Vorkath Expert,ActivityScore,Vorkath,10000,9000,,<:CollectorBadge:926004335014457456>
+909588261285036102,Venenatis Expert,ActivityScore,Venenatis,1000,900,,<:CollectorBadge:926004335014457456>
+974745507652063274,Wintertodt Expert,ActivityScore,Wintertodt,1000,900,,<:CollectorBadge:926004335014457456>
+974745418661519380,Zalcano Expert,ActivityScore,Zalcano,1000,900,,<:CollectorBadge:926004335014457456>
+815236890088177694,Zulrah Expert,ActivityScore,Zulrah,10000,9000,,<:CollectorBadge:926004335014457456>
+1063220454694846554,Chaos Ele' Expert,ActivityScore,Chaos Elemental,1000,900,,<:CollectorBadge:926004335014457456>
+894982241871093870,Corp Expert,ActivityScore,Corporeal Beast,1000,900,,<:CollectorBadge:926004335014457456>
+1063221183157387274,Deranged Arch Expert,ActivityScore,Deranged Archaeologist,1000,900,,<:CollectorBadge:926004335014457456>
+1063226076941254756,Mimic Expert,ActivityScore,Mimic,100,90,,<:CollectorBadge:926004335014457456>
+1063224402470240396,Phantom Muspah Expert,ActivityScore,Phantom Muspah,10000,9000,,<:CollectorBadge:926004335014457456>
+867527934617059328,Skotizo Expert,ActivityScore,Skotizo,100,90,,<:CollectorBadge:926004335014457456>
+1063222049578942594,Tempoross Expert,ActivityScore,Tempoross,1000,900,,<:CollectorBadge:926004335014457456>
+1063222616531423322,Zuk Expert,ActivityScore,TzKal-Zuk,100,90,,<:CollectorBadge:926004335014457456>
+1063223225745674342,Jad Expert,ActivityScore,TzTok-Jad,100,90,,<:CollectorBadge:926004335014457456>
+1063223673781227530,Vet' ion Expert,ActivityScore,Vet'ion,1000,900,,<:CollectorBadge:926004335014457456>
+1096112496357683320,Artio Expert,ActivityScore,Artio,10000,9000,,<:CollectorBadge:926004335014457456>
+1096112998772379668,Spindel Expert,ActivityScore,Spindel,10000,9000,,<:CollectorBadge:926004335014457456>
+1096113211125809172,Calvar'ion Expert,ActivityScore,Calvar'ion,10000,9000,,<:CollectorBadge:926004335014457456>
+1136632964009181214,Duke Expert,ActivityScore,Duke Sucellus,10000,9000,,<:CollectorBadge:926004335014457456>
+1136636017772859495,The Leviathan Expert,ActivityScore,The Leviathan,10000,9000,,<:CollectorBadge:926004335014457456>
+1136635842434191471,The Whisperer Expert,ActivityScore,The Whisperer,10000,9000,,<:CollectorBadge:926004335014457456>
+1136632807058329681,Vardorvis Expert,ActivityScore,Vardorvis,10000,9000,,<:CollectorBadge:926004335014457456>
+1202680529351090226,Scurrius Expert,ActivityScore,Scurrius,10000,9000,,<:CollectorBadge:926004335014457456>
+1220167868218605729,Moons of Peril Expert,ActivityScore,Lunar Chests,1000,900,,<:CollectorBadge:926004335014457456>
+1220168112054468618,Sol Heredit Expert,ActivityScore,Sol Heredit,100,90,,<:CollectorBadge:926004335014457456>
+1220165395378606111,Dizana's Quiver,ActivityScore,Sol Heredit,5,3,,<:Dizanasquiver:1429922478377140284>
+1387520108951375973,Yama Expert,ActivityScore,Yama,10000,9000,,<:CollectorBadge:926004335014457456>
+1387848814240465040,The Hueycoatl Expert,ActivityScore,The Hueycoatl,10000,9000,,<:CollectorBadge:926004335014457456>
+1387881114592608357,Araxxor Expert,ActivityScore,Araxxor,10000,9000,,<:CollectorBadge:926004335014457456>
+1387881344276627577,The Royal Titans Expert,ActivityScore,The Royal Titans,10000,9000,,<:CollectorBadge:926004335014457456>
+1387881477034999958,Amoxliatl Expert,ActivityScore,Amoxliatl,10000,9000,,<:CollectorBadge:926004335014457456>

@@ -73,6 +73,14 @@ namespace NivBot.Features.Shared
             account.RunescapeStats ??= new List<RunescapeStat>();
             account.ActivityLogs ??= new List<ActivityLog>();
 
+            // Overall (id 0): total level and total XP. Unranked overall comes back as -1 or 0, keep the last known value then.
+            var overall = stats.Skills.FirstOrDefault(x => x.Id == 0);
+            if (overall != null && overall.Level > 0 && overall.Xp > 0)
+            {
+                account.OverallLevel = overall.Level;
+                account.OverallXp = overall.Xp;
+            }
+
             foreach (Skills skill in Enum.GetValues<Skills>())
             {
                 // The hiscores skill id is the same number as the Skills enum (Overall is 0).

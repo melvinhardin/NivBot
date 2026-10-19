@@ -1,4 +1,4 @@
-using NivBot.DataLayer.Models;
+﻿using NivBot.DataLayer.Models;
 
 namespace NivBot.Features.GoodplaceTask
 {
@@ -60,15 +60,15 @@ namespace NivBot.Features.GoodplaceTask
             return Math.Min(gained, MaxXp - (long)start);
         }
 
-        public int KillsToGet(BossRate bossRate, int currentKc, double hours)
+        public int KillsToGet(Boss boss, int currentKc, double hours)
         {
-            int kills = (int)Math.Round(bossRate.KillsPerHour * options.BossRateMultiplier * hours, MidpointRounding.AwayFromZero);
+            int kills = (int)Math.Round(boss.KillsPerHour * options.BossRateMultiplier * hours, MidpointRounding.AwayFromZero);
             kills = Math.Max(kills, 1);
 
             // Kills below the hiscore minimum don't show up, so the goal has to reach at least the minimum.
-            if (currentKc < bossRate.MinimumKc)
+            if (currentKc < boss.MinimumKc)
             {
-                kills = Math.Max(kills, bossRate.MinimumKc - currentKc);
+                kills = Math.Max(kills, boss.MinimumKc - currentKc);
             }
             return kills;
         }

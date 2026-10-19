@@ -25,7 +25,7 @@ namespace NivBot.Features.GoodplaceTask
                 GoodplaceTaskStatus.NotRegistered => "You are not registered yet, use /register first.",
                 GoodplaceTaskStatus.NoAccounts => "Link an Old School RuneScape account first with /addcharacter.",
                 GoodplaceTaskStatus.HiscoresUnavailable => "The OSRS hiscores can't be reached right now, try again in a few minutes.",
-                GoodplaceTaskStatus.NoTasksAvailable => $"There are no other {kind} tasks to assign. Remove blocks with /taskblocks.",
+                GoodplaceTaskStatus.NoTasksAvailable => $"There are no other {kind} tasks to assign. Remove blocks with /taskblocks, or ask an admin to check the task settings.",
                 GoodplaceTaskStatus.NoActiveTask => $"You don't have a {kind} task, use {command} to get one.",
                 GoodplaceTaskStatus.Assigned => NewTask(result.Task),
                 GoodplaceTaskStatus.InProgress => Progress(result.Task!),

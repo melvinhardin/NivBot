@@ -42,9 +42,17 @@ services:
     build:
       context: .
       dockerfile: NivBot/Dockerfile
+    # appsettings.json isn't copied into the image, all settings come from here (values from .env).
+    # Any other setting works the same way, e.g. Tasks__SkipCooldown, see NivBot/appsettings.example.json.
     environment:
       Discord__Token: ${DISCORD_TOKEN:-}
       ConnectionStrings__Goodplace: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-postgres};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+      Temple__GroupId: ${TEMPLE_GROUP_ID:-0}
+      Temple__GroupKey: ${TEMPLE_GROUP_KEY:-}
+      WiseOldMan__GroupId: ${WOM_GROUP_ID:-0}
+      WiseOldMan__GroupVerificationCode: ${WOM_GROUP_VERIFICATION_CODE:-}
+      WiseOldMan__ApiKey: ${WOM_API_KEY:-}
+      Roles__AnnouncementChannelId: ${ROLES_ANNOUNCEMENT_CHANNEL_ID:-0}
     depends_on:
       postgres:
         condition: service_healthy

@@ -7,7 +7,7 @@ namespace NivBot.DataLayer
 {
     public static class ServiceCollectionExtensions
     {
-        // TODO: Change this to a DbContextFactory for future background jobs
+        // Scoped DbContext: the background jobs (role sync, competition results) create a scope per run
         public static IServiceCollection AddDataLayer(
             this IServiceCollection services, IConfiguration config, bool isDev) => services.AddDbContext<GoodplaceContext>(x =>
             {

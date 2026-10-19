@@ -95,30 +95,6 @@ namespace NivBot.Migrations
                         });
                 });
 
-            modelBuilder.Entity("NivBot.DataLayer.Models.ActivityRank", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("DiscordRoleId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("DiscordRoleId")
-                        .IsUnique();
-
-                    b.ToTable("ActivityRanks");
-                });
-
             modelBuilder.Entity("NivBot.DataLayer.Models.ActivityTaskBlocklist", b =>
                 {
                     b.Property<int>("GoodplaceUserId")
@@ -132,6 +108,679 @@ namespace NivBot.Migrations
                     b.HasIndex("ActivityId");
 
                     b.ToTable("ActivityTaskBlockLists");
+                });
+
+            modelBuilder.Entity("NivBot.DataLayer.Models.Boss", b =>
+                {
+                    b.Property<string>("OsrsName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsRaid")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("KillsPerHour")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("MinimumKc")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TempleMetric")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WomMetric")
+                        .HasColumnType("text");
+
+                    b.HasKey("OsrsName");
+
+                    b.ToTable("Bosses", t =>
+                        {
+                            t.HasCheckConstraint("CK_Boss_KillsPerHour", "\"KillsPerHour\" >= 0");
+
+                            t.HasCheckConstraint("CK_Boss_MinimumKc", "\"MinimumKc\" >= 0");
+
+                            t.HasCheckConstraint("CK_Boss_OsrsName", "length(\"OsrsName\") <= 100");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            OsrsName = "Abyssal Sire",
+                            IsRaid = false,
+                            KillsPerHour = 50.0,
+                            MinimumKc = 5,
+                            TempleMetric = "sire",
+                            WomMetric = "abyssal_sire"
+                        },
+                        new
+                        {
+                            OsrsName = "Alchemical Hydra",
+                            IsRaid = false,
+                            KillsPerHour = 30.0,
+                            MinimumKc = 5,
+                            TempleMetric = "hydra",
+                            WomMetric = "alchemical_hydra"
+                        },
+                        new
+                        {
+                            OsrsName = "Amoxliatl",
+                            IsRaid = false,
+                            KillsPerHour = 85.0,
+                            MinimumKc = 5,
+                            TempleMetric = "amoxliatl",
+                            WomMetric = "amoxliatl"
+                        },
+                        new
+                        {
+                            OsrsName = "Araxxor",
+                            IsRaid = false,
+                            KillsPerHour = 40.0,
+                            MinimumKc = 5,
+                            TempleMetric = "araxxor",
+                            WomMetric = "araxxor"
+                        },
+                        new
+                        {
+                            OsrsName = "Artio",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 5,
+                            TempleMetric = "artio",
+                            WomMetric = "artio"
+                        },
+                        new
+                        {
+                            OsrsName = "Barrows Chests",
+                            IsRaid = false,
+                            KillsPerHour = 22.0,
+                            MinimumKc = 5,
+                            TempleMetric = "barrows",
+                            WomMetric = "barrows_chests"
+                        },
+                        new
+                        {
+                            OsrsName = "Brutus",
+                            IsRaid = false,
+                            KillsPerHour = 250.0,
+                            MinimumKc = 5,
+                            TempleMetric = "brutus",
+                            WomMetric = "brutus"
+                        },
+                        new
+                        {
+                            OsrsName = "Bryophyta",
+                            IsRaid = false,
+                            KillsPerHour = 9.0,
+                            MinimumKc = 5,
+                            TempleMetric = "bryophyta",
+                            WomMetric = "bryophyta"
+                        },
+                        new
+                        {
+                            OsrsName = "Callisto",
+                            IsRaid = false,
+                            KillsPerHour = 142.0,
+                            MinimumKc = 5,
+                            TempleMetric = "callisto",
+                            WomMetric = "callisto"
+                        },
+                        new
+                        {
+                            OsrsName = "Calvar'ion",
+                            IsRaid = false,
+                            KillsPerHour = 55.0,
+                            MinimumKc = 5,
+                            TempleMetric = "calvarion",
+                            WomMetric = "calvarion"
+                        },
+                        new
+                        {
+                            OsrsName = "Cerberus",
+                            IsRaid = false,
+                            KillsPerHour = 65.0,
+                            MinimumKc = 5,
+                            TempleMetric = "cerberus",
+                            WomMetric = "cerberus"
+                        },
+                        new
+                        {
+                            OsrsName = "Chambers of Xeric",
+                            IsRaid = true,
+                            KillsPerHour = 3.5,
+                            MinimumKc = 5,
+                            TempleMetric = "cox",
+                            WomMetric = "chambers_of_xeric"
+                        },
+                        new
+                        {
+                            OsrsName = "Chambers of Xeric: Challenge Mode",
+                            IsRaid = true,
+                            KillsPerHour = 3.0,
+                            MinimumKc = 5,
+                            TempleMetric = "coxcm",
+                            WomMetric = "chambers_of_xeric_challenge_mode"
+                        },
+                        new
+                        {
+                            OsrsName = "Chaos Elemental",
+                            IsRaid = false,
+                            KillsPerHour = 120.0,
+                            MinimumKc = 5,
+                            TempleMetric = "chaoselemental",
+                            WomMetric = "chaos_elemental"
+                        },
+                        new
+                        {
+                            OsrsName = "Chaos Fanatic",
+                            IsRaid = false,
+                            KillsPerHour = 100.0,
+                            MinimumKc = 5,
+                            TempleMetric = "chaosfanatic",
+                            WomMetric = "chaos_fanatic"
+                        },
+                        new
+                        {
+                            OsrsName = "Commander Zilyana",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 5,
+                            TempleMetric = "commanderzilyana",
+                            WomMetric = "commander_zilyana"
+                        },
+                        new
+                        {
+                            OsrsName = "Corporeal Beast",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 5,
+                            TempleMetric = "corporealbeast",
+                            WomMetric = "corporeal_beast"
+                        },
+                        new
+                        {
+                            OsrsName = "Crazy Archaeologist",
+                            IsRaid = false,
+                            KillsPerHour = 75.0,
+                            MinimumKc = 5,
+                            TempleMetric = "crazyarchaeologist",
+                            WomMetric = "crazy_archaeologist"
+                        },
+                        new
+                        {
+                            OsrsName = "Dagannoth Prime",
+                            IsRaid = false,
+                            KillsPerHour = 105.0,
+                            MinimumKc = 5,
+                            TempleMetric = "prime",
+                            WomMetric = "dagannoth_prime"
+                        },
+                        new
+                        {
+                            OsrsName = "Dagannoth Rex",
+                            IsRaid = false,
+                            KillsPerHour = 105.0,
+                            MinimumKc = 5,
+                            TempleMetric = "rexbro",
+                            WomMetric = "dagannoth_rex"
+                        },
+                        new
+                        {
+                            OsrsName = "Dagannoth Supreme",
+                            IsRaid = false,
+                            KillsPerHour = 105.0,
+                            MinimumKc = 5,
+                            TempleMetric = "supreme",
+                            WomMetric = "dagannoth_supreme"
+                        },
+                        new
+                        {
+                            OsrsName = "Deranged Archaeologist",
+                            IsRaid = false,
+                            KillsPerHour = 80.0,
+                            MinimumKc = 5,
+                            TempleMetric = "derangedarchaeologist",
+                            WomMetric = "deranged_archaeologist"
+                        },
+                        new
+                        {
+                            OsrsName = "Doom of Mokhaiotl",
+                            IsRaid = false,
+                            KillsPerHour = 20.0,
+                            MinimumKc = 5,
+                            TempleMetric = "mokhaiotl",
+                            WomMetric = "doom_of_mokhaiotl"
+                        },
+                        new
+                        {
+                            OsrsName = "Duke Sucellus",
+                            IsRaid = false,
+                            KillsPerHour = 39.0,
+                            MinimumKc = 5,
+                            TempleMetric = "duke",
+                            WomMetric = "duke_sucellus"
+                        },
+                        new
+                        {
+                            OsrsName = "General Graardor",
+                            IsRaid = false,
+                            KillsPerHour = 58.0,
+                            MinimumKc = 5,
+                            TempleMetric = "generalgraardor",
+                            WomMetric = "general_graardor"
+                        },
+                        new
+                        {
+                            OsrsName = "Giant Mole",
+                            IsRaid = false,
+                            KillsPerHour = 125.0,
+                            MinimumKc = 5,
+                            TempleMetric = "giantmole",
+                            WomMetric = "giant_mole"
+                        },
+                        new
+                        {
+                            OsrsName = "Grotesque Guardians",
+                            IsRaid = false,
+                            KillsPerHour = 37.0,
+                            MinimumKc = 5,
+                            TempleMetric = "grotesqueguardians",
+                            WomMetric = "grotesque_guardians"
+                        },
+                        new
+                        {
+                            OsrsName = "Hespori",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 5,
+                            TempleMetric = "hespori",
+                            WomMetric = "hespori"
+                        },
+                        new
+                        {
+                            OsrsName = "K'ril Tsutsaroth",
+                            IsRaid = false,
+                            KillsPerHour = 65.0,
+                            MinimumKc = 5,
+                            TempleMetric = "kriltsutsaroth",
+                            WomMetric = "kril_tsutsaroth"
+                        },
+                        new
+                        {
+                            OsrsName = "Kalphite Queen",
+                            IsRaid = false,
+                            KillsPerHour = 55.0,
+                            MinimumKc = 5,
+                            TempleMetric = "kq",
+                            WomMetric = "kalphite_queen"
+                        },
+                        new
+                        {
+                            OsrsName = "King Black Dragon",
+                            IsRaid = false,
+                            KillsPerHour = 130.0,
+                            MinimumKc = 5,
+                            TempleMetric = "kbd",
+                            WomMetric = "king_black_dragon"
+                        },
+                        new
+                        {
+                            OsrsName = "Kraken",
+                            IsRaid = false,
+                            KillsPerHour = 100.0,
+                            MinimumKc = 5,
+                            TempleMetric = "kraken",
+                            WomMetric = "kraken"
+                        },
+                        new
+                        {
+                            OsrsName = "Kree'Arra",
+                            IsRaid = false,
+                            KillsPerHour = 40.0,
+                            MinimumKc = 5,
+                            TempleMetric = "kreearra",
+                            WomMetric = "kreearra"
+                        },
+                        new
+                        {
+                            OsrsName = "Lunar Chests",
+                            IsRaid = false,
+                            KillsPerHour = 18.0,
+                            MinimumKc = 5,
+                            TempleMetric = "lunarchests",
+                            WomMetric = "lunar_chests"
+                        },
+                        new
+                        {
+                            OsrsName = "Mad Angel",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 5,
+                            TempleMetric = "angel",
+                            WomMetric = "mad_angel"
+                        },
+                        new
+                        {
+                            OsrsName = "Maggot King",
+                            IsRaid = false,
+                            KillsPerHour = 30.0,
+                            MinimumKc = 5,
+                            TempleMetric = "maggotking",
+                            WomMetric = "maggot_king"
+                        },
+                        new
+                        {
+                            OsrsName = "Mimic",
+                            IsRaid = false,
+                            KillsPerHour = 60.0,
+                            MinimumKc = 1,
+                            TempleMetric = "mimic",
+                            WomMetric = "mimic"
+                        },
+                        new
+                        {
+                            OsrsName = "Nex",
+                            IsRaid = false,
+                            KillsPerHour = 23.5,
+                            MinimumKc = 5,
+                            TempleMetric = "nex",
+                            WomMetric = "nex"
+                        },
+                        new
+                        {
+                            OsrsName = "Nightmare",
+                            IsRaid = false,
+                            KillsPerHour = 14.0,
+                            MinimumKc = 5,
+                            TempleMetric = "nightmare",
+                            WomMetric = "nightmare"
+                        },
+                        new
+                        {
+                            OsrsName = "Obor",
+                            IsRaid = false,
+                            KillsPerHour = 12.0,
+                            MinimumKc = 5,
+                            TempleMetric = "obor",
+                            WomMetric = "obor"
+                        },
+                        new
+                        {
+                            OsrsName = "Phantom Muspah",
+                            IsRaid = false,
+                            KillsPerHour = 30.0,
+                            MinimumKc = 5,
+                            TempleMetric = "muspah",
+                            WomMetric = "phantom_muspah"
+                        },
+                        new
+                        {
+                            OsrsName = "Phosani's Nightmare",
+                            IsRaid = false,
+                            KillsPerHour = 9.5999999999999996,
+                            MinimumKc = 5,
+                            TempleMetric = "phosanis",
+                            WomMetric = "phosanis_nightmare"
+                        },
+                        new
+                        {
+                            OsrsName = "Sarachnis",
+                            IsRaid = false,
+                            KillsPerHour = 110.0,
+                            MinimumKc = 5,
+                            TempleMetric = "sarachnis",
+                            WomMetric = "sarachnis"
+                        },
+                        new
+                        {
+                            OsrsName = "Scorpia",
+                            IsRaid = false,
+                            KillsPerHour = 130.0,
+                            MinimumKc = 5,
+                            TempleMetric = "scorpia",
+                            WomMetric = "scorpia"
+                        },
+                        new
+                        {
+                            OsrsName = "Scurrius",
+                            IsRaid = false,
+                            KillsPerHour = 70.0,
+                            MinimumKc = 5,
+                            TempleMetric = "scurrius",
+                            WomMetric = "scurrius"
+                        },
+                        new
+                        {
+                            OsrsName = "Shellbane Gryphon",
+                            IsRaid = false,
+                            KillsPerHour = 95.0,
+                            MinimumKc = 5,
+                            TempleMetric = "shellbane",
+                            WomMetric = "shellbane_gryphon"
+                        },
+                        new
+                        {
+                            OsrsName = "Skotizo",
+                            IsRaid = false,
+                            KillsPerHour = 45.0,
+                            MinimumKc = 5,
+                            TempleMetric = "skotizo",
+                            WomMetric = "skotizo"
+                        },
+                        new
+                        {
+                            OsrsName = "Sol Heredit",
+                            IsRaid = false,
+                            KillsPerHour = 2.7000000000000002,
+                            MinimumKc = 5,
+                            TempleMetric = "solheredit",
+                            WomMetric = "sol_heredit"
+                        },
+                        new
+                        {
+                            OsrsName = "Spindel",
+                            IsRaid = false,
+                            KillsPerHour = 55.0,
+                            MinimumKc = 5,
+                            TempleMetric = "spindel",
+                            WomMetric = "spindel"
+                        },
+                        new
+                        {
+                            OsrsName = "Tempoross",
+                            IsRaid = false,
+                            KillsPerHour = 0.0,
+                            MinimumKc = 5,
+                            TempleMetric = "tempoross",
+                            WomMetric = "tempoross"
+                        },
+                        new
+                        {
+                            OsrsName = "The Corrupted Gauntlet",
+                            IsRaid = false,
+                            KillsPerHour = 7.2000000000000002,
+                            MinimumKc = 5,
+                            TempleMetric = "gauntlethard",
+                            WomMetric = "the_corrupted_gauntlet"
+                        },
+                        new
+                        {
+                            OsrsName = "The Gauntlet",
+                            IsRaid = false,
+                            KillsPerHour = 10.0,
+                            MinimumKc = 5,
+                            TempleMetric = "gauntlet",
+                            WomMetric = "the_gauntlet"
+                        },
+                        new
+                        {
+                            OsrsName = "The Hueycoatl",
+                            IsRaid = false,
+                            KillsPerHour = 20.0,
+                            MinimumKc = 5,
+                            TempleMetric = "hueycoatl",
+                            WomMetric = "the_hueycoatl"
+                        },
+                        new
+                        {
+                            OsrsName = "The Leviathan",
+                            IsRaid = false,
+                            KillsPerHour = 31.0,
+                            MinimumKc = 5,
+                            TempleMetric = "leviathan",
+                            WomMetric = "the_leviathan"
+                        },
+                        new
+                        {
+                            OsrsName = "The Royal Titans",
+                            IsRaid = false,
+                            KillsPerHour = 55.0,
+                            MinimumKc = 5,
+                            TempleMetric = "titans",
+                            WomMetric = "the_royal_titans"
+                        },
+                        new
+                        {
+                            OsrsName = "The Whisperer",
+                            IsRaid = false,
+                            KillsPerHour = 22.0,
+                            MinimumKc = 5,
+                            TempleMetric = "whisperer",
+                            WomMetric = "the_whisperer"
+                        },
+                        new
+                        {
+                            OsrsName = "Theatre of Blood",
+                            IsRaid = true,
+                            KillsPerHour = 3.2000000000000002,
+                            MinimumKc = 5,
+                            TempleMetric = "tob",
+                            WomMetric = "theatre_of_blood"
+                        },
+                        new
+                        {
+                            OsrsName = "Theatre of Blood: Hard Mode",
+                            IsRaid = true,
+                            KillsPerHour = 3.0,
+                            MinimumKc = 5,
+                            TempleMetric = "tobcm",
+                            WomMetric = "theatre_of_blood_hard_mode"
+                        },
+                        new
+                        {
+                            OsrsName = "Thermonuclear Smoke Devil",
+                            IsRaid = false,
+                            KillsPerHour = 150.0,
+                            MinimumKc = 5,
+                            TempleMetric = "smokedevil",
+                            WomMetric = "thermonuclear_smoke_devil"
+                        },
+                        new
+                        {
+                            OsrsName = "Tombs of Amascut",
+                            IsRaid = true,
+                            KillsPerHour = 3.7000000000000002,
+                            MinimumKc = 5,
+                            TempleMetric = "toa",
+                            WomMetric = "tombs_of_amascut"
+                        },
+                        new
+                        {
+                            OsrsName = "Tombs of Amascut: Expert Mode",
+                            IsRaid = true,
+                            KillsPerHour = 3.0,
+                            MinimumKc = 5,
+                            TempleMetric = "toae",
+                            WomMetric = "tombs_of_amascut_expert"
+                        },
+                        new
+                        {
+                            OsrsName = "TzKal-Zuk",
+                            IsRaid = false,
+                            KillsPerHour = 1.0,
+                            MinimumKc = 1,
+                            TempleMetric = "zuk",
+                            WomMetric = "tzkal_zuk"
+                        },
+                        new
+                        {
+                            OsrsName = "TzTok-Jad",
+                            IsRaid = false,
+                            KillsPerHour = 2.5,
+                            MinimumKc = 5,
+                            TempleMetric = "jad",
+                            WomMetric = "tztok_jad"
+                        },
+                        new
+                        {
+                            OsrsName = "Vardorvis",
+                            IsRaid = false,
+                            KillsPerHour = 39.0,
+                            MinimumKc = 5,
+                            TempleMetric = "vardorvis",
+                            WomMetric = "vardorvis"
+                        },
+                        new
+                        {
+                            OsrsName = "Venenatis",
+                            IsRaid = false,
+                            KillsPerHour = 80.0,
+                            MinimumKc = 5,
+                            TempleMetric = "venenatis",
+                            WomMetric = "venenatis"
+                        },
+                        new
+                        {
+                            OsrsName = "Vet'ion",
+                            IsRaid = false,
+                            KillsPerHour = 50.0,
+                            MinimumKc = 5,
+                            TempleMetric = "vetion",
+                            WomMetric = "vetion"
+                        },
+                        new
+                        {
+                            OsrsName = "Vorkath",
+                            IsRaid = false,
+                            KillsPerHour = 34.0,
+                            MinimumKc = 5,
+                            TempleMetric = "vorkath",
+                            WomMetric = "vorkath"
+                        },
+                        new
+                        {
+                            OsrsName = "Wintertodt",
+                            IsRaid = false,
+                            KillsPerHour = 0.0,
+                            MinimumKc = 5,
+                            TempleMetric = "wintertodt",
+                            WomMetric = "wintertodt"
+                        },
+                        new
+                        {
+                            OsrsName = "Yama",
+                            IsRaid = false,
+                            KillsPerHour = 18.0,
+                            MinimumKc = 5,
+                            TempleMetric = "yama",
+                            WomMetric = "yama"
+                        },
+                        new
+                        {
+                            OsrsName = "Zalcano",
+                            IsRaid = false,
+                            KillsPerHour = 0.0,
+                            MinimumKc = 5,
+                            TempleMetric = "zalcano",
+                            WomMetric = "zalcano"
+                        },
+                        new
+                        {
+                            OsrsName = "Zulrah",
+                            IsRaid = false,
+                            KillsPerHour = 46.0,
+                            MinimumKc = 5,
+                            TempleMetric = "zulrah",
+                            WomMetric = "zulrah"
+                        });
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.CollectionLog", b =>
@@ -163,6 +812,9 @@ namespace NivBot.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<long>("ChannelId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CompetitionKey")
                         .IsRequired()
                         .HasColumnType("text");
@@ -174,12 +826,25 @@ namespace NivBot.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("GuildId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalId", "CompetitionProvider")
                         .IsUnique();
 
-                    b.ToTable("CompetitionProvidersDetails");
+                    b.ToTable("CompetitionProvidersDetails", t =>
+                        {
+                            t.HasCheckConstraint("CK_CompetitionProviderDetails_Title", "length(\"Title\") <= 100");
+                        });
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.DiscordMessage", b =>
@@ -209,23 +874,59 @@ namespace NivBot.Migrations
             modelBuilder.Entity("NivBot.DataLayer.Models.DiscordRole", b =>
                 {
                     b.Property<long>("DiscordRoleId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("DiscordRoleId"));
-
-                    b.Property<int>("ActivityId")
+                    b.Property<int?>("ActivityId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Threshold")
+                    b.Property<long?>("CloseTrigger")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Emoji")
+                        .HasColumnType("text");
+
+                    b.Property<long>("GuildId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("ItemId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("Metric")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Skill")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("Threshold")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TierGroup")
+                        .HasColumnType("text");
 
                     b.HasKey("DiscordRoleId");
 
-                    b.HasIndex("ActivityId")
-                        .IsUnique();
+                    b.HasIndex("ActivityId");
 
-                    b.ToTable("DiscordRoles");
+                    b.HasIndex("GuildId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("Skill");
+
+                    b.ToTable("DiscordRoles", t =>
+                        {
+                            t.HasCheckConstraint("CK_DiscordRole_Emoji", "length(\"Emoji\") <= 100");
+
+                            t.HasCheckConstraint("CK_DiscordRole_Name", "length(\"Name\") <= 100");
+
+                            t.HasCheckConstraint("CK_DiscordRole_Threshold", "\"Threshold\" >= 0");
+
+                            t.HasCheckConstraint("CK_DiscordRole_TierGroup", "length(\"TierGroup\") <= 50");
+                        });
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.GlobalActivityBlocklist", b =>
@@ -252,6 +953,9 @@ namespace NivBot.Migrations
                     b.Property<int>("GoalAmount")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime?>("LastSkippedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("GoodplaceUserId");
 
                     b.HasIndex("ActivityId");
@@ -266,6 +970,9 @@ namespace NivBot.Migrations
 
                     b.Property<long>("GoalXp")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("LastSkippedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Skill")
                         .HasColumnType("integer");
@@ -325,6 +1032,24 @@ namespace NivBot.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NivBot.DataLayer.Models.RoleProgressNotice", b =>
+                {
+                    b.Property<int>("GoodplaceUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("DiscordRoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("NotifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("GoodplaceUserId", "DiscordRoleId");
+
+                    b.HasIndex("DiscordRoleId");
+
+                    b.ToTable("RoleProgressNotices");
+                });
+
             modelBuilder.Entity("NivBot.DataLayer.Models.RunescapeAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -335,6 +1060,12 @@ namespace NivBot.Migrations
 
                     b.Property<int>("GoodplaceUserId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("OverallLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("OverallXp")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RunescapeName")
                         .IsRequired()
@@ -564,26 +1295,1046 @@ namespace NivBot.Migrations
                     b.ToTable("SkillCompetitions");
                 });
 
-            modelBuilder.Entity("NivBot.DataLayer.Models.SkillRank", b =>
+            modelBuilder.Entity("NivBot.DataLayer.Models.SkillRate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<long>("DiscordRoleId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("Skill")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("StartXp")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("DiscordRoleId")
-                        .IsUnique();
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.ToTable("SkillRanks");
+                    b.Property<int>("XpPerHour")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Skill", "StartXp");
+
+                    b.ToTable("SkillRates", t =>
+                        {
+                            t.HasCheckConstraint("CK_SkillRate_StartXp", "\"StartXp\" >= 0 AND \"StartXp\" <= 200000000");
+
+                            t.HasCheckConstraint("CK_SkillRate_XpPerHour", "\"XpPerHour\" >= 0");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 0,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 15000
+                        },
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 37224,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 38000
+                        },
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 100000,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 55000
+                        },
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 1000000,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 65000
+                        },
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 1210421,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 315000
+                        },
+                        new
+                        {
+                            Skill = 1,
+                            StartXp = 13034431,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 505000
+                        },
+                        new
+                        {
+                            Skill = 2,
+                            StartXp = 0,
+                            Method = "Chinning in Kruk's Dungeon",
+                            XpPerHour = 420000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 15000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 37224,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 38000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 61512,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 145000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 449428,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 245000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 1986068,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 300000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 6517253,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 335000
+                        },
+                        new
+                        {
+                            Skill = 3,
+                            StartXp = 13034431,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 415000
+                        },
+                        new
+                        {
+                            Skill = 5,
+                            StartXp = 0,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 250000
+                        },
+                        new
+                        {
+                            Skill = 5,
+                            StartXp = 6517253,
+                            Method = "Bonus XP from Slayer",
+                            XpPerHour = 330000
+                        },
+                        new
+                        {
+                            Skill = 5,
+                            StartXp = 13034431,
+                            Method = "Chinning maniacal monkeys",
+                            XpPerHour = 1190000
+                        },
+                        new
+                        {
+                            Skill = 6,
+                            StartXp = 0,
+                            Method = "Dagannoth bones at the chaos altar",
+                            XpPerHour = 1670000
+                        },
+                        new
+                        {
+                            Skill = 6,
+                            StartXp = 737627,
+                            Method = "Superior dragon bones at the chaos altar",
+                            XpPerHour = 2000000
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 0,
+                            Method = "1t poison karambwan",
+                            XpPerHour = 172800
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 13363,
+                            Method = "1t karambwan",
+                            XpPerHour = 519100
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 37224,
+                            Method = "1t karambwan",
+                            XpPerHour = 591600
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 101333,
+                            Method = "1t karambwan",
+                            XpPerHour = 663600
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 273742,
+                            Method = "1t karambwan",
+                            XpPerHour = 735700
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 737627,
+                            Method = "1t karambwan",
+                            XpPerHour = 808000
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 1986068,
+                            Method = "1t karambwan",
+                            XpPerHour = 880400
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 5346332,
+                            Method = "1t karambwan",
+                            XpPerHour = 948100
+                        },
+                        new
+                        {
+                            Skill = 8,
+                            StartXp = 13034431,
+                            Method = "1t karambwan",
+                            XpPerHour = 980000
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 0,
+                            Method = "Quests and trees",
+                            XpPerHour = 29000
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 2411,
+                            Method = "2t oaks (average rate)",
+                            XpPerHour = 56000
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 22406,
+                            Method = "1.5t teaks",
+                            XpPerHour = 93174
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 41171,
+                            Method = "1.5t teaks",
+                            XpPerHour = 114728
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 111945,
+                            Method = "1.5t teaks",
+                            XpPerHour = 127339
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 302288,
+                            Method = "1.5t teaks",
+                            XpPerHour = 172507
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 814445,
+                            Method = "1.5t teaks",
+                            XpPerHour = 194022
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 1986068,
+                            Method = "1.5t teaks",
+                            XpPerHour = 207636
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 5346332,
+                            Method = "1.5t teaks",
+                            XpPerHour = 221977
+                        },
+                        new
+                        {
+                            Skill = 9,
+                            StartXp = 13034431,
+                            Method = "1.5t teaks",
+                            XpPerHour = 235000
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 29200
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 14612,
+                            Method = "3t fly fishing",
+                            XpPerHour = 46592
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 75127,
+                            Method = "Drift net fishing (67.7k hunter & 58k fishing xp/h)",
+                            XpPerHour = 58000
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 106046,
+                            Method = "Drift net fishing (84.7k hunter & 67k fishing xp/h)",
+                            XpPerHour = 67000
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 229685,
+                            Method = "Drift net fishing (98.7k hunter & 74.9k fishing xp/h)",
+                            XpPerHour = 74900
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 302288,
+                            Method = "Drift net fishing (112.8k hunter & 83.3k fishing xp/h)",
+                            XpPerHour = 83300
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 593234,
+                            Method = "Drift net fishing (123k hunter & 90.5k fishing xp/h)",
+                            XpPerHour = 90500
+                        },
+                        new
+                        {
+                            Skill = 11,
+                            StartXp = 737627,
+                            Method = "Drift net fishing (123k hunter & 93.3k fishing xp/h) + 2t swordfish & tuna",
+                            XpPerHour = 93300
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 0,
+                            Method = "Colored logs",
+                            XpPerHour = 73700
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 22406,
+                            Method = "Teak logs",
+                            XpPerHour = 138900
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 45529,
+                            Method = "Arctic pine logs",
+                            XpPerHour = 184250
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 61512,
+                            Method = "Maple logs",
+                            XpPerHour = 198990
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 101333,
+                            Method = "Artefacts with firemaking (160.5k thieving & 135.9k firemaking xp/h)",
+                            XpPerHour = 135900
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 273742,
+                            Method = "Artefacts with firemaking (191k thieving & 174.7k firemaking xp/h)",
+                            XpPerHour = 174700
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 1210421,
+                            Method = "Artefacts with firemaking (220.6k thieving & 262.1k firemaking xp/h)",
+                            XpPerHour = 262100
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 5346332,
+                            Method = "Artefacts with firemaking (242.2k thieving & 302k firemaking xp/h)",
+                            XpPerHour = 302000
+                        },
+                        new
+                        {
+                            Skill = 12,
+                            StartXp = 13034431,
+                            Method = "Artefacts with firemaking (255k thieving & 302k firemaking xp/h)",
+                            XpPerHour = 302000
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 0,
+                            Method = "Leather items",
+                            XpPerHour = 37000
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 4470,
+                            Method = "Sapphires",
+                            XpPerHour = 139000
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 9730,
+                            Method = "Emeralds",
+                            XpPerHour = 187650
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 20224,
+                            Method = "Rubies",
+                            XpPerHour = 236300
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 50339,
+                            Method = "Diamonds",
+                            XpPerHour = 298850
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 368599,
+                            Method = "Green d'hide bodies",
+                            XpPerHour = 335230
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 814445,
+                            Method = "Blue d'hide bodies",
+                            XpPerHour = 378490
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 1475581,
+                            Method = "Red d'hide bodies",
+                            XpPerHour = 421740
+                        },
+                        new
+                        {
+                            Skill = 13,
+                            StartXp = 2951373,
+                            Method = "Black d'hide bodies",
+                            XpPerHour = 465000
+                        },
+                        new
+                        {
+                            Skill = 14,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 46500
+                        },
+                        new
+                        {
+                            Skill = 14,
+                            StartXp = 37224,
+                            Method = "Dolo Blast Furnace gold",
+                            XpPerHour = 475000
+                        },
+                        new
+                        {
+                            Skill = 14,
+                            StartXp = 13034431,
+                            Method = "Dolo Blast Furnace gold",
+                            XpPerHour = 505000
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 20000
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 35025,
+                            Method = "Motherlode Mine for the prospector kit and Shooting Stars for the celestial ring",
+                            XpPerHour = 50600
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 393485,
+                            Method = "3t granite",
+                            XpPerHour = 106540
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 1210421,
+                            Method = "3t granite",
+                            XpPerHour = 112166
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 3258594,
+                            Method = "3t granite",
+                            XpPerHour = 116760
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 8771558,
+                            Method = "3t granite",
+                            XpPerHour = 119438
+                        },
+                        new
+                        {
+                            Skill = 15,
+                            StartXp = 13034431,
+                            Method = "3t granite",
+                            XpPerHour = 126000
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 11100
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 8025,
+                            Method = "Serum 207's",
+                            XpPerHour = 218750
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 123660,
+                            Method = "Super energies",
+                            XpPerHour = 293750
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 166636,
+                            Method = "Super strengths",
+                            XpPerHour = 312500
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 368599,
+                            Method = "Super restores",
+                            XpPerHour = 356250
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 496254,
+                            Method = "Super defences",
+                            XpPerHour = 375000
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 668051,
+                            Method = "Antifire potions",
+                            XpPerHour = 393750
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 899257,
+                            Method = "Ranging potions",
+                            XpPerHour = 406250
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 1336443,
+                            Method = "Magic potions",
+                            XpPerHour = 431250
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 1475581,
+                            Method = "1t stamina potions",
+                            XpPerHour = 535500
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 2951373,
+                            Method = "1t extended antifires",
+                            XpPerHour = 577500
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 3972294,
+                            Method = "1t anti-venoms",
+                            XpPerHour = 630000
+                        },
+                        new
+                        {
+                            Skill = 16,
+                            StartXp = 11805606,
+                            Method = "1t extended super antifires",
+                            XpPerHour = 840000
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 15100
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 75127,
+                            Method = "Wilderness Agility Course",
+                            XpPerHour = 35000
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 123660,
+                            Method = "Hallowed Sepulchre",
+                            XpPerHour = 45000
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 333804,
+                            Method = "Hallowed Sepulchre",
+                            XpPerHour = 56300
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 899257,
+                            Method = "Hallowed Sepulchre",
+                            XpPerHour = 68900
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 2421087,
+                            Method = "Hallowed Sepulchre",
+                            XpPerHour = 79700
+                        },
+                        new
+                        {
+                            Skill = 17,
+                            StartXp = 6517253,
+                            Method = "Hallowed Sepulchre with ancient & forgotten brews",
+                            XpPerHour = 102000
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 0,
+                            Method = "Quests, fruit stalls",
+                            XpPerHour = 15000
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 61512,
+                            Method = "Blackjacking",
+                            XpPerHour = 80000
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 91721,
+                            Method = "Artefacts with firemaking (160.5k thieving & 135.9k firemaking xp/h)",
+                            XpPerHour = 160500
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 295315,
+                            Method = "Artefacts with firemaking (191k thieving & 174.7k firemaking xp/h)",
+                            XpPerHour = 191000
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 1319012,
+                            Method = "Artefacts with firemaking (220.6k thieving & 262.1k firemaking xp/h)",
+                            XpPerHour = 220600
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 4799743,
+                            Method = "Artefacts with firemaking (242.2k thieving & 302k firemaking xp/h)",
+                            XpPerHour = 242200
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 10966391,
+                            Method = "Artefacts with ancient brews (255.6k thieving & 250k herblore xp/h)",
+                            XpPerHour = 255600
+                        },
+                        new
+                        {
+                            Skill = 18,
+                            StartXp = 13034431,
+                            Method = "Artefacts with ancient brews after 200m firemaking (260k thieving & 250k herblore xp/h)",
+                            XpPerHour = 260000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 0,
+                            Method = "Efficient slayer",
+                            XpPerHour = 5000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 37224,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 12000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 101333,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 40000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 449428,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 74250
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 1986068,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 79000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 3258594,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 86500
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 5346332,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 87000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 7195629,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 93000
+                        },
+                        new
+                        {
+                            Skill = 19,
+                            StartXp = 13034431,
+                            Method = "Efficient Slayer",
+                            XpPerHour = 105800
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 16000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 32500,
+                            Method = "Tree runs",
+                            XpPerHour = 304000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 61512,
+                            Method = "Tree runs",
+                            XpPerHour = 506000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 166636,
+                            Method = "Tree runs",
+                            XpPerHour = 719000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 273742,
+                            Method = "Tree runs",
+                            XpPerHour = 1083000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 605032,
+                            Method = "Tree runs",
+                            XpPerHour = 1362000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 1210421,
+                            Method = "Tree runs",
+                            XpPerHour = 1896000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 2192818,
+                            Method = "Tree runs",
+                            XpPerHour = 2314000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 3258594,
+                            Method = "Tree runs",
+                            XpPerHour = 2475000
+                        },
+                        new
+                        {
+                            Skill = 20,
+                            StartXp = 5346332,
+                            Method = "Tree runs",
+                            XpPerHour = 2500000
+                        },
+                        new
+                        {
+                            Skill = 21,
+                            StartXp = 0,
+                            Method = "Quests",
+                            XpPerHour = 13600
+                        },
+                        new
+                        {
+                            Skill = 21,
+                            StartXp = 33210,
+                            Method = "GotR rewards",
+                            XpPerHour = 45000
+                        },
+                        new
+                        {
+                            Skill = 21,
+                            StartXp = 1210421,
+                            Method = "Solo mud runes",
+                            XpPerHour = 75400
+                        },
+                        new
+                        {
+                            Skill = 21,
+                            StartXp = 3258594,
+                            Method = "Solo mud runes",
+                            XpPerHour = 106100
+                        },
+                        new
+                        {
+                            Skill = 21,
+                            StartXp = 13034431,
+                            Method = "Duo lava runes",
+                            XpPerHour = 162000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 0,
+                            Method = "Varrock museum and birdhouses",
+                            XpPerHour = 30000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 2107,
+                            Method = "Oak birdhouses",
+                            XpPerHour = 83000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 7028,
+                            Method = "Willow birdhouses",
+                            XpPerHour = 110000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 20224,
+                            Method = "Teak birdhouses",
+                            XpPerHour = 138000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 55649,
+                            Method = "Drift net fishing (67.7k hunter & 58.0k fishing xp/h)",
+                            XpPerHour = 67700
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 91721,
+                            Method = "Drift net fishing (84.7k hunter & 67.0k fishing xp/h)",
+                            XpPerHour = 84700
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 343551,
+                            Method = "Drift net fishing (112.8k hunter & 83.3k fishing xp/h)",
+                            XpPerHour = 112800
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 737627,
+                            Method = "Drift net fishing (123.0k hunter & 90.5k fishing xp/h)",
+                            XpPerHour = 123000
+                        },
+                        new
+                        {
+                            Skill = 22,
+                            StartXp = 933979,
+                            Method = "Drift net fishing (123k hunter & 93.3k fishing xp/h), scales to black chinchompas",
+                            XpPerHour = 123000
+                        },
+                        new
+                        {
+                            Skill = 23,
+                            StartXp = 0,
+                            Method = "Low-level furniture",
+                            XpPerHour = 54700
+                        },
+                        new
+                        {
+                            Skill = 23,
+                            StartXp = 18247,
+                            Method = "Oak larders",
+                            XpPerHour = 450000
+                        },
+                        new
+                        {
+                            Skill = 23,
+                            StartXp = 123660,
+                            Method = "Mahogany tables",
+                            XpPerHour = 950000
+                        },
+                        new
+                        {
+                            Skill = 23,
+                            StartXp = 1475581,
+                            Method = "Mahogany benches",
+                            XpPerHour = 1070000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 0,
+                            Method = "Port tasks, Charting & Quests",
+                            XpPerHour = 10000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 13363,
+                            Method = "Barracuda trials (The Tempor Tantrum)",
+                            XpPerHour = 25000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 101333,
+                            Method = "Large shipwrecks with boost",
+                            XpPerHour = 35000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 166636,
+                            Method = "Barracuda Trials (The Jubbly Jive)",
+                            XpPerHour = 85000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 899257,
+                            Method = "Barracuda Trials (The Gwenith Glide) - Camphor hull",
+                            XpPerHour = 205000
+                        },
+                        new
+                        {
+                            Skill = 24,
+                            StartXp = 5346332,
+                            Method = "Barracuda Trials (The Gwenith Glide) - Rosewood hull",
+                            XpPerHour = 240000
+                        });
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.SkillTaskBlocklist", b =>
@@ -655,23 +2406,6 @@ namespace NivBot.Migrations
                     b.Navigation("RunescapeAccount");
                 });
 
-            modelBuilder.Entity("NivBot.DataLayer.Models.ActivityRank", b =>
-                {
-                    b.HasOne("NivBot.DataLayer.Models.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NivBot.DataLayer.Models.DiscordRole", "DiscordRole")
-                        .WithOne()
-                        .HasForeignKey("NivBot.DataLayer.Models.ActivityRank", "DiscordRoleId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("DiscordRole");
-                });
-
             modelBuilder.Entity("NivBot.DataLayer.Models.ActivityTaskBlocklist", b =>
                 {
                     b.HasOne("NivBot.DataLayer.Models.Activity", "Activity")
@@ -713,12 +2447,23 @@ namespace NivBot.Migrations
             modelBuilder.Entity("NivBot.DataLayer.Models.DiscordRole", b =>
                 {
                     b.HasOne("NivBot.DataLayer.Models.Activity", "Activity")
-                        .WithOne()
-                        .HasForeignKey("NivBot.DataLayer.Models.DiscordRole", "ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("NivBot.DataLayer.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("NivBot.DataLayer.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("Skill")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Activity");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.GlobalActivityBlocklist", b =>
@@ -758,6 +2503,25 @@ namespace NivBot.Migrations
                         .HasForeignKey("NivBot.DataLayer.Models.GoodplaceSkillTask", "GoodplaceUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GoodplaceUser");
+                });
+
+            modelBuilder.Entity("NivBot.DataLayer.Models.RoleProgressNotice", b =>
+                {
+                    b.HasOne("NivBot.DataLayer.Models.DiscordRole", "DiscordRole")
+                        .WithMany()
+                        .HasForeignKey("DiscordRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NivBot.DataLayer.Models.GoodplaceUser", "GoodplaceUser")
+                        .WithMany()
+                        .HasForeignKey("GoodplaceUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DiscordRole");
 
                     b.Navigation("GoodplaceUser");
                 });
@@ -807,14 +2571,13 @@ namespace NivBot.Migrations
                     b.Navigation("CompetitionProviderDetails");
                 });
 
-            modelBuilder.Entity("NivBot.DataLayer.Models.SkillRank", b =>
+            modelBuilder.Entity("NivBot.DataLayer.Models.SkillRate", b =>
                 {
-                    b.HasOne("NivBot.DataLayer.Models.DiscordRole", "DiscordRole")
-                        .WithOne()
-                        .HasForeignKey("NivBot.DataLayer.Models.SkillRank", "DiscordRoleId")
+                    b.HasOne("NivBot.DataLayer.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("Skill")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DiscordRole");
                 });
 
             modelBuilder.Entity("NivBot.DataLayer.Models.SkillTaskBlocklist", b =>

@@ -35,7 +35,14 @@ namespace NivBot.Features.SyncCollectionList
             // Check if item in Db
             var addedItems = currentTempleItems.Keys.Except(dbDict.Keys).ToList();
 
-            // TODO add functionality to update all the itemnames in the db.
+            // Update the names of items that were renamed on Temple
+            foreach (DataLayer.Models.Item item in currentDbItems)
+            {
+                if (currentTempleItems.TryGetValue(item.OsrsId, out string? templeName) && item.OsrsName != templeName)
+                {
+                    item.OsrsName = templeName;
+                }
+            }
 
             // Add new Items 
             List<NivBot.DataLayer.Models.Item> newItems = addedItems.Select(x => new NivBot.DataLayer.Models.Item

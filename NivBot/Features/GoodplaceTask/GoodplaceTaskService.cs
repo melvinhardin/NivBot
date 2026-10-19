@@ -196,11 +196,25 @@ namespace NivBot.Features.GoodplaceTask
         {
             // A goal at or below the baseline can only come from old test data (goal 1), replace it without a reward.
             bool validTask = current.Required > 0;
+
+            // Boss tasks also pay the boss's own points (Activity.Points, set with /setbosspoints) as a bonus
+            int bonus = 0;
+            if (validTask && type == TaskType.Boss && user.GoodplaceActivityTask != null)
+            {
+                int activityId = user.GoodplaceActivityTask.ActivityId;
+                bonus = await db.Activities
+                    .Where(x => x.Id == activityId)
+                    .Select(x => x.Points)
+                    .FirstOrDefaultAsync();
+            }
+
+            int points = options.PointsPerTask + bonus;
+            int currency = options.CurrencyPerTask + bonus;
             if (validTask)
             {
                 Wallet wallet = user.Wallet ??= new Wallet { GoodplaceUserId = user.Id };
-                wallet.GoodplacePoints += options.PointsPerTask;
-                wallet.GoodplaceCurrency += options.CurrencyPerTask;
+                wallet.GoodplacePoints += points;
+                wallet.GoodplaceCurrency += currency;
             }
 
             TaskProgress? next = await AssignTaskAsync(user, accounts, type, exclude: CurrentTaskKey(user, type), allowRepeat: true);
@@ -211,7 +225,7 @@ namespace NivBot.Features.GoodplaceTask
             {
                 return next == null ? new(GoodplaceTaskStatus.NoTasksAvailable) : new(GoodplaceTaskStatus.Assigned, next);
             }
-            return new(GoodplaceTaskStatus.Completed, next, current.Name, options.PointsPerTask, options.CurrencyPerTask);
+            return new(GoodplaceTaskStatus.Completed, next, current.Name, points, currency);
         }
 
         private Task<GoodplaceUser?> LoadUserAsync(long discordId) =>
@@ -323,7 +337,7 @@ namespace NivBot.Features.GoodplaceTask
         private async Task<TaskProgress?> AssignBossTaskAsync(GoodplaceUser user, List<RunescapeAccount> accounts, int? exclude, bool allowRepeat)
         {
             // Bosses are matched to their rate by name; activities without a rate (clues, minigames...) are never assigned.
-            Dictionary<string, BossRate> rates = (await db.BossRates.AsNoTracking().ToListAsync())
+            Dictionary<string, Boss> rates = (await db.Bosses.AsNoTracking().ToListAsync())
                 .Where(x => x.KillsPerHour > 0)
                 .GroupBy(x => x.OsrsName, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);

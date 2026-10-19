@@ -4,6 +4,7 @@ using NivBot.DataLayer;
 using NivBot.DataLayer.Models;
 using NivBot.ExternalServicesLayer.TempleAPI;
 using NivBot.ExternalServicesLayer.TempleAPI.Models;
+using NivBot.Features.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,9 +23,9 @@ namespace NivBot.Features.SyncUserCollections
             // Get the list from the API
             List<ParsedMember> groupCollog = await templeApi.GetGroupCollectionsAsync(groupId);
 
-            // Make a hashset from the names to use in the db query
+            // Make a hashset from the names to use in the db query (normalized the same way as when linking)
             HashSet<string> names = groupCollog
-                .Select(x => x.OsrsName.ToLowerInvariant())
+                .Select(x => OsrsNames.Normalize(x.OsrsName))
                 .ToHashSet();
 
             // Get the relevant names from the db
@@ -55,7 +56,7 @@ namespace NivBot.Features.SyncUserCollections
             foreach (var osrsCharacter in groupCollog)
             {
                 // Skip to the next character if not in the db
-                if (!accounts.TryGetValue(osrsCharacter.OsrsName.ToLowerInvariant(), out var account))
+                if (!accounts.TryGetValue(OsrsNames.Normalize(osrsCharacter.OsrsName), out var account))
                 { continue; }
                 foreach (var item in osrsCharacter.Items)
                 {

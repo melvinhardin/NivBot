@@ -3,17 +3,26 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
     ports:
-      - "5432:5432"
+      # Only reachable from this machine
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   pgadmin:
     image: dpage/pgadmin4:latest
     ports:
-      - 5050:80
+      # pgAdmin runs without a login, so only reachable from this machine
+      - "127.0.0.1:5050:80"
     environment:
       # Required by pgAdmin
       PGADMIN_DEFAULT_EMAIL: demo@example.com
@@ -23,6 +32,23 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
 
       # Don't require a "master" password after logging in
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'  
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+
+  # The bot itself, only started with: docker compose --profile bot up -d --build
+  # A plain "docker compose up" leaves it out, so it never runs next to a bot you are debugging
+  # (two processes with the same token would both answer every command).
+  nivbot:
+    profiles: ["bot"]
+    build:
+      context: .
+      dockerfile: NivBot/Dockerfile
+    environment:
+      Discord__Token: ${DISCORD_TOKEN:-}
+      ConnectionStrings__Goodplace: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-postgres};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   postgres_data:

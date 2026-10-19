@@ -12,8 +12,12 @@ namespace NivBot.DataLayer.Models
 
         public Skills Skill { get; set; }
 
-        // This is the cumulative amount of the activity done by ALL of the users runescape accounts
+        // Summed XP of this skill over ALL of the users runescape accounts when the task was assigned (the baseline)
         public long SummedCurrentXp { get; set; }
+        // Summed XP the user has to reach to complete the task (baseline + XP to gain)
         public long GoalXp { get; set; }
+
+        // UTC time of the last skip, used for the skip cooldown
+        public DateTime? LastSkippedAt { get; set; }
     }
 }

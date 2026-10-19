@@ -1,38 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetCord;
-using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
-using NetCord.Logging;
+using NetCord.Hosting.Services.ComponentInteractions;
+using NetCord.Services.ComponentInteractions;
 using NivBot.DataLayer;
 using NivBot.ExternalServicesLayer.OsrsAPI;
 using NivBot.ExternalServicesLayer.TempleAPI;
 using NivBot.Features.GoodplaceTask;
 using NivBot.Features.LinkOsrsAccount;
 using NivBot.Features.RegisterGoodplaceUser;
+using NivBot.Features.Shared;
 using NivBot.Features.SyncActivities;
 using NivBot.Features.SyncCollectionList;
 using NivBot.Features.SyncUserCollections;
-using System.ComponentModel;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-// testing
-string osrsname = "niv lem";
-osrsname = osrsname.ToLower().Replace("_", " ").Replace("-", " ");
-Console.WriteLine(osrsname);
-// Do all of the DI
+
+// Configuration comes from appsettings.json (see appsettings.example.json) and environment variables,
+// e.g. Discord__Token and ConnectionStrings__Goodplace in docker compose.
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-Console.WriteLine(builder.Configuration.GetConnectionString("Goodplace") ?? "<null>");
-Console.WriteLine(builder.Environment.ContentRootPath);
+
+builder.Services.AddSingleton(builder.Configuration.GetSection("Tasks").Get<TaskOptions>() ?? new TaskOptions());
+builder.Services.AddSingleton(builder.Configuration.GetSection("Osrs").Get<OsrsOptions>() ?? new OsrsOptions());
+
 // Add the DI for the OsrsAPI
 builder.Services
     .AddHttpClient<IOsrsHighscoreService, OsrsHighscoreService>(client =>
     {
         client.BaseAddress = new Uri("https://secure.runescape.com/m=hiscore_oldschool/");
+        client.Timeout = TimeSpan.FromSeconds(20);
     });
 // Add the DI for the TempleAPI
 builder.Services
@@ -41,60 +40,37 @@ builder.Services
         client.BaseAddress = new Uri("https://templeosrs.com/api/");
     });
 
-
-//// Add the DI for Netcord
-
+// Add the DI for Netcord: slash commands, and the buttons / select menus used by the task commands
 builder.Services
     .AddDiscordGateway()
-    .AddApplicationCommands();
+    .AddApplicationCommands()
+    .AddComponentInteractions<ButtonInteraction, ButtonInteractionContext>()
+    .AddComponentInteractions<StringMenuInteraction, StringMenuInteractionContext>();
 
-// Add the DI for the DbContext
-
+// Add the DI for the DbContext, sensitive data (parameter values) is only logged when running as Development
 builder.Services
-    .AddDataLayer(builder.Configuration, true);
+    .AddDataLayer(builder.Configuration, builder.Environment.IsDevelopment());
 
-//// Adding slash commands DI.2
+// Feature services
+builder.Services.AddScoped<OsrsAccountStatsService>();
 builder.Services.AddScoped<LinkOsrsAccountService>();
 builder.Services.AddScoped<RegisterGoodplaceUserService>();
 builder.Services.AddScoped<SyncActivitiesService>();
 builder.Services.AddScoped<SyncCollectionListService>();
 builder.Services.AddScoped<SyncOsrsAccountCollectionService>();
 builder.Services.AddScoped<GoodplaceTaskService>();
-
+builder.Services.AddSingleton<TaskGoalCalculator>();
 
 IHost app = builder.Build();
-//var createAccount = app.Services.GetRequiredService<RegisterGoodplaceUserService>();
-//var test = app.Services.GetRequiredService<SyncActivitiesService>();
-//var test2 = app.Services.GetRequiredService<LinkOsrsAccountService>();
-//var test3 = app.Services.GetRequiredService<SyncCollectionListService>();
-//var test4 = app.Services.GetRequiredService<SyncOsrsAccountCollectionService>();
-//var test5 = app.Services.GetRequiredService<GoodplaceTaskService>();
-//await test4.SyncGroupAccountCollog(948);
-//await test.SyncActivities();
-//await test3.SyncItemList();
-//await createAccount.RegisterGoodplaceUser(2L);
-//await test2.LinkAccountAsync(1L, "D en");
 
+// Apply pending migrations on startup, so a fresh database (e.g. in docker compose) is created automatically
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    GoodplaceContext db = scope.ServiceProvider.GetRequiredService<GoodplaceContext>();
+    await db.Database.MigrateAsync();
+}
 
-//await test5.GetGoodplaceBossTask(1);
-//await test5.GetGoodplaceBossTask(2);
-
-//await test5.GetGoodplaceBossTask(2);
-//await test5.BlockGoodplaceTask(2, 0);
-//await test5.GetGoodplaceBossTask(2);
-//await test5.GetGoodplaceBossTask(2);
-//var options = new JsonSerializerOptions
-//{
-//    WriteIndented = true,
-//    ReferenceHandler = ReferenceHandler.IgnoreCycles  // drop if not EF entities
-//};
-
-//var path = Path.Combine(AppContext.BaseDirectory, "models.json");
-//File.WriteAllText(path, JsonSerializer.Serialize(test, options));
-//Console.WriteLine(path);   // print it so you can paste into the browser
-//// Add the application commands
+// Add the application commands and component interactions
 app.AddModules(typeof(Program).Assembly);
-
-
 
 await app.RunAsync();

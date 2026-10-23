@@ -38,8 +38,9 @@ namespace NivBot.DataLayer
         public DbSet<ActivityTaskBlocklist> ActivityTaskBlockLists => Set<ActivityTaskBlocklist>();
         public DbSet<SkillTaskBlocklist> SkillTaskBlockLists => Set<SkillTaskBlocklist>();
         public DbSet<DiscordRole> DiscordRoles => Set<DiscordRole>();
-        public DbSet<SkillRank> SkillRanks => Set<SkillRank>();
-        public DbSet<ActivityRank> ActivityRanks => Set<ActivityRank>();
+        public DbSet<SkillRate> SkillRates => Set<SkillRate>();
+        public DbSet<Boss> Bosses => Set<Boss>();
+        public DbSet<RoleProgressNotice> RoleProgressNotices => Set<RoleProgressNotice>();
 
 
 

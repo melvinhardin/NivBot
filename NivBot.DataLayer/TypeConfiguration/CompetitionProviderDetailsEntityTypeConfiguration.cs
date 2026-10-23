@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NivBot.DataLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NivBot.DataLayer.TypeConfiguration
 {
@@ -21,7 +18,9 @@ namespace NivBot.DataLayer.TypeConfiguration
             builder
                 .HasIndex(x => new { x.ExternalId, x.CompetitionProvider })
                 .IsUnique();
-            
+
+            builder
+                .ToTable(t => t.HasCheckConstraint("CK_CompetitionProviderDetails_Title", "length(\"Title\") <= 100"));
         }
     }
 }

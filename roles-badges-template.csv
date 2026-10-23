@@ -1,0 +1,38 @@
+role_id,name,metric,target,threshold,close_trigger,tier_group,emoji
+,500+ Total Level,TotalLevel,,500,,total-level,<:SOTW:937516391806947368>
+,"1,000+ Total Level",TotalLevel,,1000,,total-level,<:SOTW:937516391806947368>
+,"1,500+ Total Level",TotalLevel,,1500,,total-level,<:SOTW:937516391806947368>
+,"1,750+ Total Level",TotalLevel,,1750,,total-level,<:SOTW:937516391806947368>
+,"2,000+ Total Level",TotalLevel,,2000,,total-level,<:SOTW:937516391806947368>
+,"2,200+ Total Level",TotalLevel,,2200,,total-level,<:SOTW:937516391806947368>
+,500M+ Total XP,TotalXp,,500000000,,total-xp,<:SOTW:937516391806947368>
+,750M+ Total XP,TotalXp,,750000000,,total-xp,<:SOTW:937516391806947368>
+,1B+ Total XP,TotalXp,,1000000000,,total-xp,<:SOTW:937516391806947368>
+,1K+ Total Boss KC,TotalBossKc,,1000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,2.5k+ Total Boss KC,TotalBossKc,,2500,,boss-kc,<:Totalbosskc:1429919981306384385>
+,5k+ Total Boss KC,TotalBossKc,,5000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,7.5k+ Total Boss KC,TotalBossKc,,7500,,boss-kc,<:Totalbosskc:1429919981306384385>
+,10k+ Total Boss KC,TotalBossKc,,10000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,15k+ Total Boss KC,TotalBossKc,,15000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,20k+ Total Boss KC,TotalBossKc,,20000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,25k+ Total Boss KC,TotalBossKc,,25000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,35k+ Total Boss KC,TotalBossKc,,35000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,50k+ Total Boss KC,TotalBossKc,,50000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,75k+ Total Boss KC,TotalBossKc,,75000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,100k+ Total Boss KC,TotalBossKc,,100000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,150k+ Total Boss KC,TotalBossKc,,150000,,boss-kc,<:Totalbosskc:1429919981306384385>
+,100+ Raids Completed,RaidsCompleted,,100,,raids,<:Raidsbadge:1411759065255645296>
+,250+ Raids Completed,RaidsCompleted,,250,,raids,<:Raidsbadge:1411759065255645296>
+,500+ Raids Completed,RaidsCompleted,,500,,raids,<:Raidsbadge:1411759065255645296>
+,750+ Raids Completed,RaidsCompleted,,750,,raids,<:Raidsbadge:1411759065255645296>
+,"1,000+ Raids Completed",RaidsCompleted,,1000,,raids,<:Raidsbadge:1411759065255645296>
+,"1,500+ Raids Completed",RaidsCompleted,,1500,,raids,<:Raidsbadge:1411759065255645296>
+,"2,500+ Raids Completed",RaidsCompleted,,2500,,raids,<:Raidsbadge:1411759065255645296>
+,"3,500+ Raids Completed",RaidsCompleted,,3500,,raids,<:Raidsbadge:1411759065255645296>
+,"5,000+ Raids Completed",RaidsCompleted,,5000,,raids,<:Raidsbadge:1411759065255645296>
+,Watson badge,ActivityScore,Clue Scrolls (all),500,,clues,<:RSClue:926004551612506173>
+,Sherlock badge,ActivityScore,Clue Scrolls (all),1000,,clues,<:RSClue:926004551612506173>
+,200m in any skill,SkillsAt200m,,1,,,<:SOTW:937516391806947368>
+,99 in 2 skills,SkillsAt99,,2,,,<:trimmed:1429922989075333170>
+,Infernal Cape,ActivityScore,TzKal-Zuk,1,,,<:Infernal_Badge:1405171636138803341>
+,Fire cape,CollectionLogItem,Fire cape,1,,,<:Fire_Badge:1405171577506627604>

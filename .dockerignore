@@ -1,0 +1,14 @@
+# Keep secrets and build output out of the image. The container gets its settings from
+# environment variables (see compose.yaml), not from appsettings.json.
+**/appsettings*.json
+**/.env
+.env
+**/.git
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/*.user
+**/Dockerfile*
+compose.yaml
+*.zip

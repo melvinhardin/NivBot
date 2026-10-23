@@ -1,15 +1,15 @@
-﻿using NetCord.Rest;
+﻿using NetCord;
+using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NivBot.Features.SyncActivities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NivBot.Features.SyncCollectionList
 {
     public class SyncCollectionListModule(SyncCollectionListService syncItems) : ApplicationCommandModule<ApplicationCommandContext>
     {
-        [SlashCommand("syncitems", "Attempt to add new items to the database")]
+        // Admin only, see SyncActivitiesModule
+        [SlashCommand("syncitems", "Attempt to add new items to the database",
+            DefaultGuildPermissions = Permissions.Administrator,
+            Contexts = new[] { InteractionContextType.Guild })]
         public async Task SyncItems()
         {
             await Context.Interaction.SendResponseAsync(InteractionCallback.DeferredMessage(NetCord.MessageFlags.Ephemeral));

@@ -1,20 +1,22 @@
-﻿using NetCord.Rest;
+﻿using Microsoft.Extensions.Logging;
+using NetCord;
+using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NivBot.Features.RegisterGoodplaceUser;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NivBot.Features.SyncActivities
 {
-    public class SyncActivitiesModule(SyncActivitiesService syncActivities) : ApplicationCommandModule<ApplicationCommandContext>
+    public class SyncActivitiesModule(SyncActivitiesService syncActivities, ILogger<SyncActivitiesModule> logger) : ApplicationCommandModule<ApplicationCommandContext>
     {
-        [SlashCommand("syncactivities", "Attempt to add new activities to the database")]
+        // Admin only: hidden for members without the Administrator permission (server owners can change this
+        // under Server Settings > Integrations) and not usable in DMs, where guild permissions don't apply.
+        [SlashCommand("syncactivities", "Attempt to add new activities to the database",
+            DefaultGuildPermissions = Permissions.Administrator,
+            Contexts = new[] { InteractionContextType.Guild })]
         public async Task SyncActivities()
         {
-            await Context.Interaction.SendResponseAsync(InteractionCallback.DeferredMessage(NetCord.MessageFlags.Ephemeral));
+            await RespondAsync(InteractionCallback.DeferredMessage(MessageFlags.Ephemeral));
 
-            // Making sure whatever happens on the bot side, the user always gets a response. 
+            // Making sure whatever happens on the bot side, the user always gets a response.
             string reply;
             try
             {
@@ -25,9 +27,11 @@ namespace NivBot.Features.SyncActivities
                     SyncActivitiesResult.FailureDbSave =>
                         "Failed saving to the database",
                     SyncActivitiesResult.FailureNameChange =>
-                        "Failed, a name has been changed, contact Melvin",
+                        "Failed, an activity was renamed or removed on the hiscores. Fix the Activities table by hand.",
                     SyncActivitiesResult.FailureOsrsApiConnection =>
-                        "Failed, could not connect to the Temple API",
+                        "Failed, could not connect to the OSRS hiscores",
+                    SyncActivitiesResult.FailureReferencePlayerNotFound =>
+                        "Failed, the reference player (Osrs:ReferencePlayer in the config) is not on the hiscores",
                     SyncActivitiesResult.SuccessNoChanges =>
                         "Success, no changes were found",
                     SyncActivitiesResult.Success =>
@@ -37,9 +41,10 @@ namespace NivBot.Features.SyncActivities
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "/syncactivities failed");
                 reply = "Something went wrong, try again later.";
             }
-            await Context.Interaction.ModifyResponseAsync(message => message.WithContent(reply));
+            await ModifyResponseAsync(message => message.Content = reply);
         }
     }
 }

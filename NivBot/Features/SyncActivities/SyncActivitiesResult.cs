@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NivBot.Features.SyncActivities
+﻿namespace NivBot.Features.SyncActivities
 {
     public enum SyncActivitiesResult
     {
         Success,
         FailureOsrsApiConnection,
+        FailureReferencePlayerNotFound,
         FailureDbConnection,
         FailureNameChange,
         FailureDbSave,

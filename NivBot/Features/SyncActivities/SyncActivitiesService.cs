@@ -1,26 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NivBot.DataLayer;
-using NivBot.DataLayer.Models;
 using NivBot.ExternalServicesLayer.OsrsAPI;
 using NivBot.ExternalServicesLayer.OsrsAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NivBot.Features.SyncActivities
 {
-    public class SyncActivitiesService(GoodplaceContext db, IOsrsHighscoreService osrsApi)
+    public class SyncActivitiesService(GoodplaceContext db, IOsrsHighscoreService osrsApi, OsrsOptions osrsOptions)
     {
         public async Task<SyncActivitiesResult> SyncActivities()
         {
-            // Get all the activities from the runescape api
-            PlayerStats? player = await osrsApi.GetPlayerStatsAsync("niv lem");
-            if (player == null) { return SyncActivitiesResult.FailureOsrsApiConnection; }
+            // Get all the activities from the runescape api, any existing player returns the full list
+            PlayerStats? player;
+            try { player = await osrsApi.GetPlayerStatsAsync(osrsOptions.ReferencePlayer); }
+            catch (Exception) { return SyncActivitiesResult.FailureOsrsApiConnection; }
+            if (player == null) { return SyncActivitiesResult.FailureReferencePlayerNotFound; }
 
             // Get all the activities currently in the database
             List<DataLayer.Models.Activity> activities;
             try { activities = await db.Activities.ToListAsync(); }
-            catch (Exception ex) { return SyncActivitiesResult.FailureDbConnection; }
+            catch (Exception) { return SyncActivitiesResult.FailureDbConnection; }
 
             // Turning both lists to dictionary sorted by the osrsnames.
             var apiToName = player.Activities.ToDictionary(x => x.Name);
@@ -42,7 +40,7 @@ namespace NivBot.Features.SyncActivities
                 i.OsrsId = apiToName[i.OsrsName].Id;
             }
 
-            // Add new Activities 
+            // Add new Activities
             List<NivBot.DataLayer.Models.Activity> newActivities = addedActivities.Select(x => new NivBot.DataLayer.Models.Activity
             {
                 OsrsId = apiToName[x].Id,
@@ -51,8 +49,8 @@ namespace NivBot.Features.SyncActivities
             }).ToList();
             db.Activities.AddRange(newActivities);
             try { await db.SaveChangesAsync(); }
-            catch (Exception ex){ return SyncActivitiesResult.FailureDbSave; }
-            
+            catch (Exception) { return SyncActivitiesResult.FailureDbSave; }
+
             // Return Success state
             return SyncActivitiesResult.Success;
         }

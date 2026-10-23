@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using NivBot.ExternalServicesLayer.OsrsAPI.Models;
-using System;
-using System.Collections.Generic;
+﻿using NivBot.ExternalServicesLayer.OsrsAPI.Models;
+using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace NivBot.ExternalServicesLayer.OsrsAPI
 {
     public sealed class OsrsHighscoreService(HttpClient httpClient) : IOsrsHighscoreService
     {
-        // Try to get the highscore from osrs, if a 404 is thrown return null
+        // Returns null when the player is not on the hiscores (404).
+        // Throws HttpRequestException when the hiscores are down or answer with another error.
         public async Task<PlayerStats?> GetPlayerStatsAsync(string name)
         {
-            
-                var response = await httpClient.GetAsync($"index_lite.json?player={Uri.EscapeDataString(name)}");
-                response.EnsureSuccessStatusCode();
-                PlayerStats? content = await response.Content.ReadFromJsonAsync<PlayerStats>();
-                return content;
-            
+            using var response = await httpClient.GetAsync($"index_lite.json?player={Uri.EscapeDataString(name)}");
+            if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<PlayerStats>();
         }
     }
 }
